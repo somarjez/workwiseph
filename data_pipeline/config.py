@@ -74,4 +74,14 @@ TABLE_REGISTRY: list[TableSpec] = [
     TableSpec("education_underemployed",
               "15 Number of Underemployed Persons by Highest Grade Completed (2017 PSCED) January 2023 to April 2026.xlsx",
               "category", "persons", "raw.education_underemployed"),
+    # --- V2.3: workforce composition ---
+    TableSpec("worker_class",
+              "13 Number of Employed Persons by Class of Worker.xlsx",
+              "category", "persons", "raw.class_of_worker"),
+    TableSpec("hours_worked",
+              "20 Number of Employed Persons by Hours Worked April 2005 to April 2026.xlsx",
+              "category", "persons", "raw.hours_worked"),
+    TableSpec("mean_hours",
+              "19 Mean Hours Worked in One Week April 2005 to April 2026.xlsx",
+              "category", "hours", "raw.mean_hours_worked"),
 ]

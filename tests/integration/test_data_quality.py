@@ -34,7 +34,7 @@ def test_sex_labels_normalized(conn):
 def test_all_source_tables_present(conn):
     rows = conn.execute(text(
         "SELECT DISTINCT source_table FROM clean.fact_long")).scalars().all()
-    assert len(rows) == 15  # 10 V1 core + industry/occupation/pay + 2 education
+    assert len(rows) == 18  # 10 core + industry/occupation/pay + 2 education + worker-class/hours/mean-hours
 
 
 def test_pay_rows_are_php_and_positive(conn):
@@ -55,6 +55,15 @@ def test_education_sources_present(conn):
         "WHERE source_table IN ('raw.education_employed','raw.education_underemployed') "
         "AND category IS NOT NULL AND value IS NOT NULL")).scalar()
     assert n > 0
+
+
+def test_mean_hours_in_reasonable_range(conn):
+    # weekly mean hours should be a sane 1–80h; guards against unit/parse errors.
+    bad = conn.execute(text(
+        "SELECT count(*) FROM clean.fact_long "
+        "WHERE source_table='raw.mean_hours_worked' AND value IS NOT NULL "
+        "AND (value <= 0 OR value > 80)")).scalar()
+    assert bad == 0
 
 
 def test_category_rows_have_category(conn):

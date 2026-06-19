@@ -49,6 +49,19 @@ def fetch_category_latest(source_table):
     return [dict(r) for r in rows]
 
 
+def fetch_series_for_category(source_table, category):
+    """Monthly time series for one specific category (e.g. 'Mean Hours')."""
+    sql = """
+        SELECT year, month, value, unit
+        FROM clean.fact_long
+        WHERE source_table = :st AND category = :cat AND period_type = 'monthly'
+        ORDER BY reference_date NULLS LAST
+    """
+    with engine.connect() as c:
+        rows = c.execute(text(sql), {"st": source_table, "cat": category}).mappings().all()
+    return [dict(r) for r in rows]
+
+
 def fetch_total_series(source_table):
     """Time series for the aggregate (TOTAL) category."""
     sql = """

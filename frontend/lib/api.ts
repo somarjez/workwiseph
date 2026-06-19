@@ -13,3 +13,4 @@ export interface VisibleInvisible { visible: Point[]; invisible: Point[]; }
 export interface CategoryRow { category: string; value: number | null; unit: string; year?: number; month?: string | null; }
 export interface SectorResp { latest: CategoryRow[]; total_series: Point[]; }
 export interface PayResp { latest: CategoryRow[]; }
+export interface MeanHoursResp { series: Point[]; }
