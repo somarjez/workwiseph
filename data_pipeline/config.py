@@ -67,4 +67,11 @@ TABLE_REGISTRY: list[TableSpec] = [
     TableSpec("average_pay_industry",
               "16 Average Daily Basic Pay of Wage and Salary Workers by Major Industry Group, Philippines 2016 to April 2026 (in Php).xlsx",
               "pay_matrix", "PHP", "raw.average_pay_industry"),
+    # --- V2.2: education ---
+    TableSpec("education_employed",
+              "14 Number of Employed Persons by Highest Grade Completed (2017 PSCED) January 2023 to April 2026.xlsx",
+              "category", "persons", "raw.education_employed"),
+    TableSpec("education_underemployed",
+              "15 Number of Underemployed Persons by Highest Grade Completed (2017 PSCED) January 2023 to April 2026.xlsx",
+              "category", "persons", "raw.education_underemployed"),
 ]

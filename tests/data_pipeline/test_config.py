@@ -17,7 +17,8 @@ def test_registry_has_core_and_v2_tables():
         "unemployed", "underemployed", "not_in_labor_force",
         "visible_underemployed", "invisible_underemployed",
     }
-    v2 = {"employed_industry", "employed_occupation", "average_pay_industry"}
+    v2 = {"employed_industry", "employed_occupation", "average_pay_industry",
+          "education_employed", "education_underemployed"}
     assert core <= keys
     assert v2 <= keys
     assert keys == core | v2
