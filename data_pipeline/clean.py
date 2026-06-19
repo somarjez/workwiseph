@@ -28,6 +28,9 @@ CATEGORY_INDICATOR = {
     "average_pay_industry": "Average Daily Basic Pay",
     "education_employed": "Employed Persons by Education",
     "education_underemployed": "Underemployed Persons by Education",
+    "worker_class": "Employed Persons by Class of Worker",
+    "hours_worked": "Employed Persons by Hours Worked",
+    "mean_hours": "Mean Hours Worked",
 }
 
 
