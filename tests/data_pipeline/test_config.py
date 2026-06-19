@@ -10,14 +10,17 @@ def test_datasets_dir_exists():
     assert settings.datasets_dir.is_dir()
 
 
-def test_registry_has_ten_core_tables():
+def test_registry_has_core_and_v2_tables():
     keys = {t.key for t in TABLE_REGISTRY}
-    expected = {
+    core = {
         "rates", "levels", "population", "labor_force", "employed",
         "unemployed", "underemployed", "not_in_labor_force",
         "visible_underemployed", "invisible_underemployed",
     }
-    assert keys == expected
+    v2 = {"employed_industry", "employed_occupation", "average_pay_industry"}
+    assert core <= keys
+    assert v2 <= keys
+    assert keys == core | v2
 
 
 def test_every_registry_file_exists():

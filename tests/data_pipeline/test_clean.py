@@ -6,9 +6,10 @@ from data_pipeline.clean import clean_long, to_numeric
 
 KI_SPEC = TableSpec("rates", "x", "key_indicator", "percent", "raw.lfs_rates", [])
 AS_SPEC = TableSpec("underemployed", "x", "age_sex", "persons", "raw.underemployed_age_sex")
+CAT_SPEC = TableSpec("employed_industry", "x", "category", "persons", "raw.employed_industry_2009")
 
 STD_COLS = ["year", "month", "month_number", "period_type", "reference_date",
-            "sex", "age_group", "indicator_name", "value", "unit",
+            "sex", "age_group", "category", "indicator_name", "value", "unit",
             "source_table", "source_updated_at"]
 
 
@@ -59,3 +60,17 @@ def test_age_sex_indicator_name_and_dot_to_null():
     assert row.indicator_name == "Underemployed Persons"
     assert row.value is None or (isinstance(row.value, float) and math.isnan(row.value))
     assert row.unit == "persons"
+
+
+def test_category_clean_defaults():
+    df_in = pd.DataFrame([
+        {"year": 2012, "month": "January", "category": "AGRICULTURE", "value_raw": "12112.06"},
+    ])
+    out = clean_long(df_in, CAT_SPEC)
+    assert list(out.columns) == STD_COLS
+    row = out.iloc[0]
+    assert row.category == "AGRICULTURE"
+    assert row.sex == "Both Sexes"      # defaulted (no sex dimension)
+    assert row.age_group == "Total"      # defaulted
+    assert row.indicator_name == "Employed Persons by Industry"
+    assert row.value == 12112.06
