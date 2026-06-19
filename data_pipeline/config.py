@@ -57,4 +57,14 @@ TABLE_REGISTRY: list[TableSpec] = [
     TableSpec("invisible_underemployed",
               "18 Invisibly Underemployed Persons by Sex and by Age Group April 2005 to April 2026.xlsx",
               "age_sex", "persons", "raw.invisible_underemployed_age_sex"),
+    # --- V2.1: industry & occupation ---
+    TableSpec("employed_industry",
+              "10 Number of Employed Persons by Major Industry Group.xlsx",
+              "category", "persons", "raw.employed_industry_2009"),
+    TableSpec("employed_occupation",
+              "12 Number of Employed Persons by Major Occupation Group (2012 PSOC Code) April 2016 to April 2026.xlsx",
+              "category", "persons", "raw.employed_occupation_2012"),
+    TableSpec("average_pay_industry",
+              "16 Average Daily Basic Pay of Wage and Salary Workers by Major Industry Group, Philippines 2016 to April 2026 (in Php).xlsx",
+              "pay_matrix", "PHP", "raw.average_pay_industry"),
 ]

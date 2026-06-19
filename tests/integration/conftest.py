@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import text
 from backend.app.db.session import engine
 
-EXPECTED_SOURCE_TABLES = 10
+EXPECTED_SOURCE_TABLES = 13
 
 
 def data_is_complete() -> bool:

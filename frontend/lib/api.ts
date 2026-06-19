@@ -10,3 +10,6 @@ export interface AgeRow { year: number; month: string | null; age_group: string;
 export interface AgeSex { source: string; data: AgeRow[]; }
 export interface UnderSummary { rate: Series; by_age: AgeSex; }
 export interface VisibleInvisible { visible: Point[]; invisible: Point[]; }
+export interface CategoryRow { category: string; value: number | null; unit: string; year?: number; month?: string | null; }
+export interface SectorResp { latest: CategoryRow[]; total_series: Point[]; }
+export interface PayResp { latest: CategoryRow[]; }

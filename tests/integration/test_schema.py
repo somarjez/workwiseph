@@ -26,6 +26,6 @@ def test_fact_long_columns(conn):
     insp = inspect(engine)
     cols = {c["name"] for c in insp.get_columns("fact_long", schema="clean")}
     expected = {"id", "year", "month", "month_number", "period_type",
-                "reference_date", "sex", "age_group", "indicator_name",
+                "reference_date", "sex", "age_group", "category", "indicator_name",
                 "value", "unit", "source_table", "source_updated_at"}
     assert expected.issubset(cols)

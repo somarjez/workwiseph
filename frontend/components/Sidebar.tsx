@@ -6,6 +6,7 @@ const NAV = [
   { href: "/", label: "Overview" },
   { href: "/underemployment", label: "Underemployment" },
   { href: "/age-gender", label: "Age & Gender" },
+  { href: "/industry", label: "Industry & Occupation" },
 ];
 
 export default function Sidebar() {

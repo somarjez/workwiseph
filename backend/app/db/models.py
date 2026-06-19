@@ -9,6 +9,7 @@ class FactLong(Base):
     __table_args__ = (
         Index("ix_fact_long_lookup", "source_table", "year", "month_number"),
         Index("ix_fact_long_indicator", "indicator_name", "sex", "age_group"),
+        Index("ix_fact_long_category", "source_table", "category"),
         {"schema": "clean"},
     )
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -19,6 +20,7 @@ class FactLong(Base):
     reference_date: Mapped[date | None] = mapped_column(Date)
     sex: Mapped[str] = mapped_column(String(16), nullable=False)
     age_group: Mapped[str] = mapped_column(String(32), nullable=False)
+    category: Mapped[str | None] = mapped_column(String(96))
     indicator_name: Mapped[str] = mapped_column(String(80), nullable=False)
     value: Mapped[float | None] = mapped_column(Float)
     unit: Mapped[str] = mapped_column(String(16), nullable=False)

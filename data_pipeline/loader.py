@@ -5,24 +5,28 @@ from sqlalchemy import text
 from data_pipeline.config import TableSpec, settings
 from data_pipeline.parsers.key_indicator import parse_key_indicator
 from data_pipeline.parsers.age_sex import parse_age_sex
+from data_pipeline.parsers.category import parse_category
+from data_pipeline.parsers.pay_matrix import parse_pay_matrix
 from data_pipeline.clean import clean_long
 from backend.app.db.session import engine
 
 CLEAN_TABLE = "fact_long"
 CLEAN_COLUMNS = [
     "year", "month", "month_number", "period_type", "reference_date",
-    "sex", "age_group", "indicator_name", "value", "unit",
+    "sex", "age_group", "category", "indicator_name", "value", "unit",
     "source_table", "source_updated_at",
 ]
 
 
 def parse_and_clean(spec: TableSpec) -> pd.DataFrame:
     path = settings.datasets_dir / spec.filename
-    if spec.archetype == "key_indicator":
-        parsed = parse_key_indicator(path, spec)
-    else:
-        parsed = parse_age_sex(path, spec)
-    return clean_long(parsed, spec)
+    parser = {
+        "key_indicator": parse_key_indicator,
+        "age_sex": parse_age_sex,
+        "category": parse_category,
+        "pay_matrix": parse_pay_matrix,
+    }[spec.archetype]
+    return clean_long(parser(path, spec), spec)
 
 
 def reset_clean() -> None:
