@@ -64,6 +64,10 @@ def clean_long(df: pd.DataFrame, spec: TableSpec) -> pd.DataFrame:
     else:
         out["indicator_name"] = CATEGORY_INDICATOR[spec.key]
     out["value"] = df["value_raw"].apply(to_numeric)
+    # In the pay sheet, 0 is a "not yet available" sentinel (e.g. future 2026
+    # months) — a daily basic pay of 0 is never a real observation, so treat as null.
+    if spec.unit == "PHP":
+        out.loc[out["value"] == 0, "value"] = None
     out["unit"] = spec.unit
     out["source_table"] = spec.source_table
     out["source_updated_at"] = pd.Timestamp.utcnow()
