@@ -11,7 +11,7 @@ from backend.app.db.session import engine
 CLEAN_TABLE = "fact_long"
 CLEAN_COLUMNS = [
     "year", "month", "month_number", "period_type", "reference_date",
-    "sex", "age_group", "indicator_name", "value", "unit",
+    "sex", "age_group", "category", "indicator_name", "value", "unit",
     "source_table", "source_updated_at",
 ]
 

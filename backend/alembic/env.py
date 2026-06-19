@@ -19,6 +19,15 @@ if config.config_file_name:
 target_metadata = Base.metadata
 
 
+def _include_object(obj, name, type_, reflected, compare_to):
+    # Autogenerate must only manage ORM-modeled tables. The ETL creates tables in
+    # the `analytics` schema (and historically `raw`) outside the ORM; without this
+    # filter, reflected-but-unmodeled tables would be auto-dropped.
+    if type_ == "table" and obj.schema not in (None, "clean"):
+        return False
+    return True
+
+
 def run_migrations_online():
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
@@ -28,7 +37,7 @@ def run_migrations_online():
             connection.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{s}"'))
         connection.commit()
         context.configure(connection=connection, target_metadata=target_metadata,
-                          include_schemas=True)
+                          include_schemas=True, include_object=_include_object)
         with context.begin_transaction():
             context.run_migrations()
 
