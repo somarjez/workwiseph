@@ -14,3 +14,11 @@ export interface CategoryRow { category: string; value: number | null; unit: str
 export interface SectorResp { latest: CategoryRow[]; total_series: Point[]; }
 export interface PayResp { latest: CategoryRow[]; }
 export interface MeanHoursResp { series: Point[]; }
+export interface ForecastPoint { month: string; value: number; lower: number; upper: number; }
+export interface ForecastMetrics { mae?: number | null; rmse?: number | null; mape?: number | null; }
+export interface ForecastResp {
+  indicator: string;
+  history: { reference_date: string; value: number | null }[];
+  forecast: ForecastPoint[];
+  metrics: ForecastMetrics;
+}
