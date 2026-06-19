@@ -7,6 +7,7 @@ const NAV = [
   { href: "/underemployment", label: "Underemployment" },
   { href: "/age-gender", label: "Age & Gender" },
   { href: "/industry", label: "Industry & Occupation" },
+  { href: "/education", label: "Education" },
 ];
 
 export default function Sidebar() {

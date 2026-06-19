@@ -26,6 +26,8 @@ CATEGORY_INDICATOR = {
     "employed_industry": "Employed Persons by Industry",
     "employed_occupation": "Employed Persons by Occupation",
     "average_pay_industry": "Average Daily Basic Pay",
+    "education_employed": "Employed Persons by Education",
+    "education_underemployed": "Underemployed Persons by Education",
 }
 
 

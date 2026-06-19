@@ -4,7 +4,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from backend.app.core.config import settings
 from backend.app.core.rate_limit import limiter
-from backend.app.routers import health, kpis, labor, underemployment, sectors
+from backend.app.routers import health, kpis, labor, underemployment, sectors, education
 
 
 def create_app() -> FastAPI:
@@ -23,6 +23,7 @@ def create_app() -> FastAPI:
     app.include_router(labor.router, prefix="/api")
     app.include_router(underemployment.router, prefix="/api")
     app.include_router(sectors.router, prefix="/api")
+    app.include_router(education.router, prefix="/api")
     return app
 
 
