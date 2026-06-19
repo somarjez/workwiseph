@@ -2,6 +2,8 @@ import pytest
 from sqlalchemy import text
 from backend.app.db.session import engine
 
+pytestmark = pytest.mark.usefixtures("require_loaded_data")
+
 
 @pytest.fixture(scope="module")
 def conn():

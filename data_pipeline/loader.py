@@ -1,4 +1,5 @@
 from __future__ import annotations
+import io
 import pandas as pd
 from sqlalchemy import text
 from data_pipeline.config import TableSpec, settings
@@ -8,6 +9,11 @@ from data_pipeline.clean import clean_long
 from backend.app.db.session import engine
 
 CLEAN_TABLE = "fact_long"
+CLEAN_COLUMNS = [
+    "year", "month", "month_number", "period_type", "reference_date",
+    "sex", "age_group", "indicator_name", "value", "unit",
+    "source_table", "source_updated_at",
+]
 
 
 def parse_and_clean(spec: TableSpec) -> pd.DataFrame:
@@ -19,18 +25,34 @@ def parse_and_clean(spec: TableSpec) -> pd.DataFrame:
     return clean_long(parsed, spec)
 
 
-def load_raw(df_clean: pd.DataFrame, spec: TableSpec) -> int:
-    schema, table = spec.source_table.split(".")
-    df_clean.to_sql(table, engine, schema=schema, if_exists="replace", index=False)
-    return len(df_clean)
-
-
 def reset_clean() -> None:
     with engine.begin() as c:
         c.execute(text(f"TRUNCATE TABLE clean.{CLEAN_TABLE} RESTART IDENTITY"))
 
 
 def load_clean(df_clean: pd.DataFrame) -> int:
-    df_clean.to_sql(CLEAN_TABLE, engine, schema="clean",
-                    if_exists="append", index=False)
+    """Bulk-insert cleaned long rows into clean.fact_long via Postgres COPY.
+
+    COPY is a single round-trip and is dramatically faster than row-by-row
+    INSERTs over a remote pooled connection.
+    """
+    out = df_clean[CLEAN_COLUMNS].copy()
+    # month_number is float (NaN for annual rows); cast to nullable int so COPY
+    # sees "1"/"" rather than "1.0" for the integer column.
+    out["month_number"] = out["month_number"].astype("Int64")
+    buf = io.StringIO()
+    out.to_csv(buf, index=False, header=False, na_rep="\\N")
+    buf.seek(0)
+    columns = ", ".join(CLEAN_COLUMNS)
+    copy_sql = (
+        f"COPY clean.{CLEAN_TABLE} ({columns}) "
+        "FROM STDIN WITH (FORMAT csv, NULL '\\N')"
+    )
+    raw_conn = engine.raw_connection()
+    try:
+        cur = raw_conn.cursor()
+        cur.copy_expert(copy_sql, buf)
+        raw_conn.commit()
+    finally:
+        raw_conn.close()
     return len(df_clean)

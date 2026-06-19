@@ -1,6 +1,6 @@
 from __future__ import annotations
 from data_pipeline.config import TABLE_REGISTRY
-from data_pipeline.loader import parse_and_clean, load_raw, load_clean, reset_clean
+from data_pipeline.loader import parse_and_clean, load_clean, reset_clean
 from data_pipeline.analytics_builder import (
     build_monthly_labor_summary, build_dashboard_kpis)
 
@@ -10,7 +10,6 @@ def run_full_etl() -> dict[str, int]:
     reset_clean()
     for spec in TABLE_REGISTRY:
         df = parse_and_clean(spec)
-        load_raw(df, spec)
         counts[spec.key] = load_clean(df)
     counts["monthly_labor_summary"] = build_monthly_labor_summary()
     counts["dashboard_kpis"] = build_dashboard_kpis()
