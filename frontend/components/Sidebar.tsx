@@ -9,6 +9,7 @@ const NAV = [
   { href: "/industry", label: "Industry & Occupation" },
   { href: "/education", label: "Education" },
   { href: "/workforce", label: "Workforce" },
+  { href: "/forecasting", label: "Forecasting" },
 ];
 
 export default function Sidebar() {
