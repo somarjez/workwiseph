@@ -52,6 +52,22 @@ export default function Admin() {
     setTimeout(() => loadLogs(token), 1500);
   }
 
+  async function uploadCsv(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !token) return;
+    setMsg(null);
+    const form = new FormData();
+    form.append("file", file);
+    const r = await fetch(apiUrl("/admin/upload"), {
+      method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form,
+    });
+    const body = await r.json().catch(() => ({}));
+    setMsg(r.ok ? `Uploaded ${body.rows} rows from ${body.filename}.`
+                : `Upload failed: ${body.detail ?? r.status}`);
+    e.target.value = "";
+    setTimeout(() => loadLogs(token), 800);
+  }
+
   function logout() {
     localStorage.removeItem("ww_admin_token"); setToken(null); setLogs([]);
   }
@@ -84,9 +100,13 @@ export default function Admin() {
         <button onClick={() => runJob("/admin/forecast/run")}
           className="rounded bg-slate-800 px-4 py-2 text-sm font-semibold text-white">Regenerate forecasts</button>
         {token && <button onClick={() => loadLogs(token)}
-          className="rounded border border-slate-300 px-4 py-2 text-sm">Refresh logs</button>}
+          className="rounded border border-slate-300 px-4 py-2 text-sm dark:border-slate-600">Refresh logs</button>}
+        <label className="cursor-pointer rounded border border-dashed border-slate-400 px-4 py-2 text-sm dark:border-slate-600">
+          Upload CSV
+          <input type="file" accept=".csv" onChange={uploadCsv} className="hidden" />
+        </label>
       </div>
-      {msg && <p className="mb-4 text-sm text-slate-600">{msg}</p>}
+      {msg && <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">{msg}</p>}
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400">
