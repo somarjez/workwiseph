@@ -1,11 +1,16 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { apiUrl } from "@/lib/api";
+import PageHeader from "@/components/PageHeader";
 
 interface LogRow {
   id: number; job: string; status: string; detail: string | null;
   started_at: string | null; finished_at: string | null;
 }
+
+const field = "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent";
+const primaryBtn = "rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50";
+const ghostBtn = "rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-surface-2";
 
 export default function Admin() {
   const [token, setToken] = useState<string | null>(null);
@@ -14,14 +19,10 @@ export default function Admin() {
   const [logs, setLogs] = useState<LogRow[]>([]);
   const [msg, setMsg] = useState<string | null>(null);
 
-  useEffect(() => {
-    setToken(localStorage.getItem("ww_admin_token"));
-  }, []);
+  useEffect(() => { setToken(localStorage.getItem("ww_admin_token")); }, []);
 
   const loadLogs = useCallback(async (tok: string) => {
-    const r = await fetch(apiUrl("/admin/logs"), {
-      headers: { Authorization: `Bearer ${tok}` },
-    });
+    const r = await fetch(apiUrl("/admin/logs"), { headers: { Authorization: `Bearer ${tok}` } });
     if (r.ok) setLogs(await r.json());
     else if (r.status === 401) { setToken(null); localStorage.removeItem("ww_admin_token"); }
   }, []);
@@ -29,16 +30,14 @@ export default function Admin() {
   useEffect(() => { if (token) loadLogs(token); }, [token, loadLogs]);
 
   async function login(e: React.FormEvent) {
-    e.preventDefault();
-    setMsg(null);
+    e.preventDefault(); setMsg(null);
     const r = await fetch(apiUrl("/admin/login"), {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
     if (r.ok) {
       const tok = (await r.json()).access_token;
-      localStorage.setItem("ww_admin_token", tok);
-      setToken(tok); setPassword("");
+      localStorage.setItem("ww_admin_token", tok); setToken(tok); setPassword("");
     } else {
       setMsg(r.status === 429 ? "Too many attempts — wait a few minutes." : "Invalid credentials.");
     }
@@ -48,7 +47,7 @@ export default function Admin() {
     if (!token) return;
     setMsg(null);
     const r = await fetch(apiUrl(path), { method: "POST", headers: { Authorization: `Bearer ${token}` } });
-    setMsg(r.status === 202 ? "Job started — refresh logs in a moment." : `Failed (${r.status}).`);
+    setMsg(r.status === 202 ? "Job started — logs will update shortly." : `Failed (${r.status}).`);
     setTimeout(() => loadLogs(token), 1500);
   }
 
@@ -56,78 +55,76 @@ export default function Admin() {
     const file = e.target.files?.[0];
     if (!file || !token) return;
     setMsg(null);
-    const form = new FormData();
-    form.append("file", file);
+    const form = new FormData(); form.append("file", file);
     const r = await fetch(apiUrl("/admin/upload"), {
       method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form,
     });
     const body = await r.json().catch(() => ({}));
-    setMsg(r.ok ? `Uploaded ${body.rows} rows from ${body.filename}.`
-                : `Upload failed: ${body.detail ?? r.status}`);
+    setMsg(r.ok ? `Uploaded ${body.rows} rows from ${body.filename}.` : `Upload failed: ${body.detail ?? r.status}`);
     e.target.value = "";
     setTimeout(() => loadLogs(token), 800);
   }
 
-  function logout() {
-    localStorage.removeItem("ww_admin_token"); setToken(null); setLogs([]);
-  }
+  function logout() { localStorage.removeItem("ww_admin_token"); setToken(null); setLogs([]); }
 
   if (!token) {
     return (
-      <div className="max-w-sm">
-        <h2 className="mb-6 text-2xl font-bold">Admin Login</h2>
-        <form onSubmit={login} className="space-y-3">
-          <input className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
-            placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-          <input className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
-            type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button className="w-full rounded bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Sign in</button>
-          {msg && <p className="text-sm text-red-600">{msg}</p>}
+      <div className="mx-auto max-w-sm">
+        <PageHeader title="Admin" context="Sign in to refresh data, regenerate forecasts, upload a dataset, or review run history." />
+        <form onSubmit={login} className="space-y-3 rounded-xl border border-border bg-surface p-6">
+          <input className={field} placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input className={field} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <button className={`${primaryBtn} w-full`}>Sign in</button>
+          {msg && <p className="text-sm text-danger">{msg}</p>}
         </form>
       </div>
     );
   }
 
+  const statusColor = (s: string) =>
+    s === "success" ? "text-success" : s === "error" ? "text-danger" : "text-warning";
+
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Admin</h2>
-        <button onClick={logout} className="text-sm text-slate-500 underline">Sign out</button>
-      </div>
-      <div className="mb-4 flex gap-3">
-        <button onClick={() => runJob("/admin/etl/run")}
-          className="rounded bg-slate-800 px-4 py-2 text-sm font-semibold text-white">Run ETL</button>
-        <button onClick={() => runJob("/admin/forecast/run")}
-          className="rounded bg-slate-800 px-4 py-2 text-sm font-semibold text-white">Regenerate forecasts</button>
-        {token && <button onClick={() => loadLogs(token)}
-          className="rounded border border-slate-300 px-4 py-2 text-sm dark:border-slate-600">Refresh logs</button>}
-        <label className="cursor-pointer rounded border border-dashed border-slate-400 px-4 py-2 text-sm dark:border-slate-600">
+      <PageHeader title="Admin" context="Trigger data refreshes and model regeneration, upload a CSV, and audit every run.">
+        <button onClick={logout} className={ghostBtn}>Sign out</button>
+      </PageHeader>
+
+      <div className="mb-4 flex flex-wrap gap-3">
+        <button onClick={() => runJob("/admin/etl/run")} className={primaryBtn}>Run ETL</button>
+        <button onClick={() => runJob("/admin/forecast/run")} className={primaryBtn}>Regenerate forecasts</button>
+        <label className={`${ghostBtn} cursor-pointer`}>
           Upload CSV
           <input type="file" accept=".csv" onChange={uploadCsv} className="hidden" />
         </label>
+        <button onClick={() => token && loadLogs(token)} className={ghostBtn}>Refresh logs</button>
       </div>
-      {msg && <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">{msg}</p>}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      {msg && <p className="mb-4 text-sm text-muted">{msg}</p>}
+
+      <div className="overflow-hidden rounded-xl border border-border bg-surface">
         <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-            <tr><th className="px-4 py-2">#</th><th className="px-4 py-2">Job</th>
-              <th className="px-4 py-2">Status</th><th className="px-4 py-2">Started</th>
-              <th className="px-4 py-2">Finished</th></tr>
+          <thead className="border-b border-border bg-surface-2 text-xs uppercase tracking-wide text-muted">
+            <tr>
+              <th className="px-4 py-2.5 font-medium">#</th>
+              <th className="px-4 py-2.5 font-medium">Job</th>
+              <th className="px-4 py-2.5 font-medium">Status</th>
+              <th className="px-4 py-2.5 font-medium">Started</th>
+              <th className="px-4 py-2.5 font-medium">Finished</th>
+            </tr>
           </thead>
-          <tbody>
+          <tbody className="nums">
             {logs.map((l) => (
-              <tr key={l.id} className="border-t border-slate-100 dark:border-slate-800">
-                <td className="px-4 py-2">{l.id}</td>
-                <td className="px-4 py-2">{l.job}</td>
-                <td className="px-4 py-2">
-                  <span className={l.status === "success" ? "text-green-600"
-                    : l.status === "error" ? "text-red-600" : "text-amber-600"}>{l.status}</span>
-                </td>
-                <td className="px-4 py-2 text-slate-500">{l.started_at?.replace("T", " ").slice(0, 19)}</td>
-                <td className="px-4 py-2 text-slate-500">{l.finished_at?.replace("T", " ").slice(0, 19) ?? "—"}</td>
+              <tr key={l.id} className="border-t border-border first:border-t-0">
+                <td className="px-4 py-2.5 text-muted">{l.id}</td>
+                <td className="px-4 py-2.5 text-ink">{l.job}</td>
+                <td className={`px-4 py-2.5 font-medium ${statusColor(l.status)}`}>{l.status}</td>
+                <td className="px-4 py-2.5 text-muted">{l.started_at?.replace("T", " ").slice(0, 19)}</td>
+                <td className="px-4 py-2.5 text-muted">{l.finished_at?.replace("T", " ").slice(0, 19) ?? "—"}</td>
               </tr>
             ))}
-            {!logs.length && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">No runs yet.</td></tr>}
+            {!logs.length && (
+              <tr><td colSpan={5} className="px-4 py-8 text-center text-muted">No runs yet. Trigger one above.</td></tr>
+            )}
           </tbody>
         </table>
       </div>

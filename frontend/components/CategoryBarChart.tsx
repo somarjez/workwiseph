@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import type { CategoryRow } from "@/lib/api";
+import { CHART } from "@/lib/chart";
 import ChartCard from "./ChartCard";
 
 export default function CategoryBarChart({
@@ -11,16 +12,16 @@ export default function CategoryBarChart({
   const data = rows
     .filter((r) => r.value != null && r.category.toUpperCase() !== "TOTAL")
     .slice(0, topN)
-    .map((r) => ({ name: r.category.length > 22 ? r.category.slice(0, 21) + "…" : r.category, value: r.value }));
+    .map((r) => ({ name: r.category.length > 24 ? r.category.slice(0, 23) + "…" : r.category, value: r.value }));
   return (
     <ChartCard title={label} csvData={data}>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} layout="vertical" margin={{ left: 24 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.4} />
-          <XAxis type="number" tick={{ fontSize: 10, fill: "#94a3b8" }} />
-          <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} width={140} />
-          <Tooltip />
-          <Bar dataKey="value" fill="#2563eb" radius={[0, 4, 4, 0]} />
+        <BarChart data={data} layout="vertical" margin={{ top: 0, right: 12, bottom: 0, left: 8 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke={CHART.grid} strokeOpacity={0.25} horizontal={false} />
+          <XAxis type="number" tick={{ fontSize: 11, fill: CHART.tick }} tickLine={false} axisLine={false} />
+          <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: CHART.tick }} tickLine={false} axisLine={false} width={150} />
+          <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} cursor={{ fill: CHART.accent, fillOpacity: 0.06 }} />
+          <Bar dataKey="value" fill={CHART.accent} radius={[0, 4, 4, 0]} barSize={16} />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>

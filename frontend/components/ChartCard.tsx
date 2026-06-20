@@ -17,20 +17,21 @@ export default function ChartCard({
     if (svg) downloadSvgAsPng(svg as SVGSVGElement, `${base}.png`);
   }
 
+  const btn = "rounded px-1.5 py-0.5 transition-colors hover:bg-accent-weak hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent";
+
   return (
-    <div ref={ref}
-      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{title}</h3>
-        <div className="flex gap-2 text-xs text-slate-400">
+    <figure ref={ref} className="rounded-xl border border-border bg-surface p-5">
+      <figcaption className="mb-4 flex items-start justify-between gap-3">
+        <h3 className="text-sm font-semibold leading-snug text-ink">{title}</h3>
+        <div className="flex shrink-0 gap-1 text-[11px] font-medium text-muted">
           {csvData && csvData.length > 0 && (
-            <button onClick={() => downloadCSV(csvData, `${base}.csv`)}
-              className="hover:text-blue-600" title="Download data as CSV">CSV</button>
+            <button onClick={() => downloadCSV(csvData, `${base}.csv`)} className={btn}
+              title="Download data as CSV">CSV</button>
           )}
-          <button onClick={png} className="hover:text-blue-600" title="Download chart as PNG">PNG</button>
+          <button onClick={png} className={btn} title="Download chart as PNG">PNG</button>
         </div>
-      </div>
+      </figcaption>
       {children}
-    </div>
+    </figure>
   );
 }

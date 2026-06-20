@@ -16,10 +16,10 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button onClick={toggle}
-      className="mt-6 w-full rounded px-3 py-2 text-left text-sm text-slate-300 hover:bg-slate-800"
-      aria-label="Toggle dark mode">
-      {dark ? "☀️ Light mode" : "🌙 Dark mode"}
+    <button onClick={toggle} aria-label="Toggle dark mode"
+      className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+      <span aria-hidden className="text-base leading-none">{dark ? "☀" : "☾"}</span>
+      {dark ? "Light mode" : "Dark mode"}
     </button>
   );
 }

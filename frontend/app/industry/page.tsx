@@ -4,6 +4,7 @@ import type { SectorResp, PayResp, Series } from "@/lib/api";
 import CategoryBarChart from "@/components/CategoryBarChart";
 import LineSeriesChart from "@/components/LineSeriesChart";
 import StateWrapper from "@/components/StateWrapper";
+import PageHeader from "@/components/PageHeader";
 
 export default function Industry() {
   const industry = useApi<SectorResp>("/industry/employment");
@@ -17,7 +18,10 @@ export default function Industry() {
 
   return (
     <div>
-      <h2 className="mb-6 text-2xl font-bold">Industry &amp; Occupation Trends</h2>
+      <PageHeader
+        title="Industry & Occupation"
+        context="Where Filipinos work and what they earn — sector and occupation employment, plus average daily basic pay by industry."
+      />
       <div className="grid gap-6 lg:grid-cols-2">
         <StateWrapper isLoading={industry.isLoading} error={industry.error} isEmpty={!industry.data?.latest.length}>
           {industry.data && <CategoryBarChart rows={industry.data.latest} label="Top industries by employment (latest)" />}

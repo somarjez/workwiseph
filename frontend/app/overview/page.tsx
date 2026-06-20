@@ -4,6 +4,7 @@ import type { Kpi, Series } from "@/lib/api";
 import KpiCard from "@/components/KpiCard";
 import LineSeriesChart from "@/components/LineSeriesChart";
 import StateWrapper from "@/components/StateWrapper";
+import PageHeader from "@/components/PageHeader";
 
 export default function Overview() {
   const kpis = useApi<Kpi[]>("/kpis");
@@ -12,9 +13,12 @@ export default function Overview() {
 
   return (
     <div>
-      <h2 className="mb-6 text-2xl font-bold">Labor Market Overview</h2>
+      <PageHeader
+        title="Labor Market Overview"
+        context="The headline indicators from the Philippine Labor Force Survey — the rates and counts that frame everything else in this report."
+      />
       <StateWrapper isLoading={kpis.isLoading} error={kpis.error} isEmpty={!kpis.data?.length}>
-        <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+        <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
           {kpis.data?.map((k) => (
             <KpiCard key={k.indicator_name} label={k.indicator_name} value={k.value} unit={k.unit} />
           ))}
@@ -22,10 +26,10 @@ export default function Overview() {
       </StateWrapper>
       <div className="grid gap-6 lg:grid-cols-2">
         <StateWrapper isLoading={unemp.isLoading} error={unemp.error}>
-          {unemp.data && <LineSeriesChart series={unemp.data} label="Unemployment Rate over time" />}
+          {unemp.data && <LineSeriesChart series={unemp.data} label="Unemployment rate over time" />}
         </StateWrapper>
         <StateWrapper isLoading={under.isLoading} error={under.error}>
-          {under.data && <LineSeriesChart series={under.data} label="Underemployment Rate over time" />}
+          {under.data && <LineSeriesChart series={under.data} label="Underemployment rate over time" />}
         </StateWrapper>
       </div>
     </div>

@@ -3,6 +3,7 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
 } from "recharts";
 import type { ForecastResp } from "@/lib/api";
+import { CHART } from "@/lib/chart";
 import ChartCard from "./ChartCard";
 
 const fmt = (iso: string) => iso.slice(0, 7); // YYYY-MM
@@ -25,16 +26,16 @@ export default function ForecastChart({ data, label }: { data: ForecastResp; lab
 
   return (
     <ChartCard title={label} csvData={csv}>
-      <ResponsiveContainer width="100%" height={320}>
-        <ComposedChart data={rows}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.4} />
-          <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} minTickGap={28} />
-          <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} width={40} />
-          <Tooltip />
-          <Legend />
-          <Area dataKey="range" name="Forecast 95% band" stroke="none" fill="#bfdbfe" />
-          <Line dataKey="actual" name="Actual" stroke="#1e293b" dot={false} strokeWidth={2} />
-          <Line dataKey="forecast" name="Forecast" stroke="#2563eb" dot={false}
+      <ResponsiveContainer width="100%" height={340}>
+        <ComposedChart data={rows} margin={{ top: 4, right: 8, bottom: 0, left: -8 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke={CHART.grid} strokeOpacity={0.25} vertical={false} />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: CHART.tick }} tickLine={false} axisLine={false} minTickGap={28} />
+          <YAxis tick={{ fontSize: 11, fill: CHART.tick }} tickLine={false} axisLine={false} width={44} />
+          <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+          <Legend wrapperStyle={{ fontSize: 12 }} />
+          <Area dataKey="range" name="95% interval" stroke="none" fill={CHART.band} fillOpacity={0.14} />
+          <Line dataKey="actual" name="Actual" stroke={CHART.neutral} dot={false} strokeWidth={2} />
+          <Line dataKey="forecast" name="Forecast" stroke={CHART.accent} dot={false}
             strokeWidth={2} strokeDasharray="5 4" />
         </ComposedChart>
       </ResponsiveContainer>

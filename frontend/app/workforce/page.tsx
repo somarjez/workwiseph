@@ -4,6 +4,7 @@ import type { SectorResp, MeanHoursResp, Series } from "@/lib/api";
 import CategoryBarChart from "@/components/CategoryBarChart";
 import LineSeriesChart from "@/components/LineSeriesChart";
 import StateWrapper from "@/components/StateWrapper";
+import PageHeader from "@/components/PageHeader";
 
 export default function Workforce() {
   const workerClass = useApi<SectorResp>("/worker-class");
@@ -17,7 +18,10 @@ export default function Workforce() {
 
   return (
     <div>
-      <h2 className="mb-6 text-2xl font-bold">Workforce Composition</h2>
+      <PageHeader
+        title="Workforce Composition"
+        context="How the employed are split by class of worker and hours worked, and how the average work week has shifted over two decades."
+      />
       <div className="grid gap-6 lg:grid-cols-2">
         <StateWrapper isLoading={workerClass.isLoading} error={workerClass.error} isEmpty={!workerClass.data?.latest.length}>
           {workerClass.data && <CategoryBarChart rows={workerClass.data.latest} label="Employed by class of worker (latest)" topN={10} />}
