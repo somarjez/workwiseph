@@ -5,9 +5,11 @@ tables into an interactive analytics dashboard covering employment, unemployment
 underemployment, labor-force participation, and age/sex breakdowns. It pairs a
 PostgreSQL-backed ETL pipeline with a FastAPI service and a Next.js dashboard.
 
-> **Status: V1 MVP.** Overview, Underemployment, and Age & Gender dashboards over a
-> clean PSA dataset (2005–April 2026). Forecasting, anomaly detection, industry/
-> education modules, and admin upload are planned for later versions (see `Phases.md`).
+> **Status: V1–V4 implemented.** Dashboards for Overview, Underemployment, Age & Gender,
+> Industry & Occupation, Education, Workforce, and Forecasting (Holt-Winters + anomaly
+> detection), plus a secure admin area (JWT login, background ETL/forecast triggers, run
+> logs). 18 PSA tables (2005–April 2026) normalized into one long fact table. Optional
+> polish remaining: CSV upload, dark mode, portfolio landing page (see `Phases.md`).
 
 ## Architecture
 
@@ -74,9 +76,13 @@ run the ETL first to exercise them.
 
 ## API endpoints (V1)
 
-`GET /api/health` · `GET /api/kpis` · `GET /api/labor/rates` · `GET /api/labor/levels`
-· `GET /api/labor/age-sex` · `GET /api/underemployment/summary`
-· `GET /api/underemployment/visible-invisible`
+Public: `GET /api/health` · `/api/kpis` · `/api/labor/rates|levels|age-sex`
+· `/api/underemployment/summary|visible-invisible` · `/api/industry/employment`
+· `/api/occupation/employment` · `/api/pay/industry` · `/api/education/employment|underemployment`
+· `/api/worker-class` · `/api/hours-worked` · `/api/mean-hours` · `/api/forecast` · `/api/anomalies`
+
+Admin (JWT): `POST /api/admin/login` · `POST /api/admin/etl/run` · `POST /api/admin/forecast/run`
+· `GET /api/admin/logs`
 
 ## Deployment
 

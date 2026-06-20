@@ -20,3 +20,19 @@ services:
         generateValue: true
       - key: RATE_LIMIT_ENABLED
         value: "true"
+      - key: ADMIN_USERNAME
+        sync: false          # set the admin login username
+      - key: ADMIN_PASSWORD
+        sync: false          # set a strong admin password
+
+  # Monthly data refresh + forecast regeneration (PSA publishes monthly).
+  - type: cron
+    name: workwise-refresh
+    runtime: python
+    plan: free
+    schedule: "0 2 5 * *"     # 02:00 on the 5th of each month
+    buildCommand: "pip install -e backend"
+    startCommand: "python -m data_pipeline.scripts.run_etl && python -m data_pipeline.scripts.generate_forecasts"
+    envVars:
+      - key: DATABASE_URL
+        sync: false
