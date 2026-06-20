@@ -1,33 +1,23 @@
 "use client";
 import { useState } from "react";
-import { useApi } from "@/lib/useApi";
-import type { AgeSex } from "@/lib/api";
-import { SEX_OPTIONS, type Sex } from "@/lib/filters";
-import AgeBarChart from "@/components/AgeBarChart";
-import StateWrapper from "@/components/StateWrapper";
+import { SEX_FILTER_OPTIONS, type SexFilter } from "@/lib/filters";
 import PageHeader from "@/components/PageHeader";
 import PillGroup from "@/components/PillGroup";
+import SexComparableAgeBars from "@/components/SexComparableAgeBars";
 
 export default function AgeGender() {
-  const [sex, setSex] = useState<Sex>("Both Sexes");
-  const q = `&sex=${encodeURIComponent(sex)}`;
-  const employed = useApi<AgeSex>(`/labor/age-sex?source=employed${q}`);
-  const unemployed = useApi<AgeSex>(`/labor/age-sex?source=unemployed${q}`);
+  const [sex, setSex] = useState<SexFilter>("compare");
 
   return (
     <div>
       <PageHeader
         title="Age & Gender Labor Gap"
-        context="How employment and unemployment are distributed across age groups — switch sex to compare the male and female labor markets.">
-        <PillGroup label="Sex" options={SEX_OPTIONS} value={sex} onChange={setSex} />
+        context="How employment and unemployment spread across age groups — Compare overlays the male and female labor markets side by side.">
+        <PillGroup label="Sex" options={SEX_FILTER_OPTIONS} value={sex} onChange={setSex} />
       </PageHeader>
       <div className="grid gap-6 lg:grid-cols-2">
-        <StateWrapper isLoading={employed.isLoading} error={employed.error} isEmpty={!employed.data?.data.length}>
-          {employed.data && <AgeBarChart rows={employed.data.data} label="Employed persons by age group (latest year)" />}
-        </StateWrapper>
-        <StateWrapper isLoading={unemployed.isLoading} error={unemployed.error} isEmpty={!unemployed.data?.data.length}>
-          {unemployed.data && <AgeBarChart rows={unemployed.data.data} label="Unemployed persons by age group (latest year)" />}
-        </StateWrapper>
+        <SexComparableAgeBars source="employed" sex={sex} label="Employed persons" />
+        <SexComparableAgeBars source="unemployed" sex={sex} label="Unemployed persons" />
       </div>
     </div>
   );
