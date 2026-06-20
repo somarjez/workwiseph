@@ -6,9 +6,14 @@ import type { Series } from "@/lib/api";
 import { CHART } from "@/lib/chart";
 import ChartCard from "./ChartCard";
 
-export default function LineSeriesChart({ series, label }: { series: Series; label: string }) {
-  const data = series.data
-    .filter((p) => p.value != null)
+export default function LineSeriesChart({ series, label, lastYears }: {
+  series: Series; label: string; lastYears?: number;
+}) {
+  const withData = series.data.filter((p) => p.value != null);
+  const maxYear = withData.reduce((m, p) => Math.max(m, p.year), 0);
+  const minYear = lastYears ? maxYear - lastYears : 0;
+  const data = withData
+    .filter((p) => p.year >= minYear)
     .map((p) => ({ name: `${p.month ?? ""} ${p.year}`.trim(), value: p.value }));
   return (
     <ChartCard title={label} csvData={data}>
