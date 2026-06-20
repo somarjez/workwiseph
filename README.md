@@ -1,5 +1,7 @@
 # WorkWise PH — Labor Market & Underemployment Analytics
 
+[![CI](https://github.com/somarjez/workwiseph/actions/workflows/ci.yml/badge.svg)](https://github.com/somarjez/workwiseph/actions/workflows/ci.yml)
+
 WorkWise PH transforms Philippine Statistics Authority (PSA) Labor Force Survey
 tables into an interactive analytics dashboard covering employment, unemployment,
 underemployment, labor-force participation, and age/sex breakdowns. It pairs a
