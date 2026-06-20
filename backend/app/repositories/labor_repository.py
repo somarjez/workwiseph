@@ -78,7 +78,7 @@ def fetch_total_series(source_table):
 
 def fetch_kpis():
     sql = """
-        SELECT indicator_name, value, unit, reference_date
+        SELECT indicator_name, value, unit, reference_date, previous_value AS previous
         FROM analytics.dashboard_kpis
         ORDER BY unit, indicator_name
     """
