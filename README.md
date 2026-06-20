@@ -5,11 +5,12 @@ tables into an interactive analytics dashboard covering employment, unemployment
 underemployment, labor-force participation, and age/sex breakdowns. It pairs a
 PostgreSQL-backed ETL pipeline with a FastAPI service and a Next.js dashboard.
 
-> **Status: V1–V4 implemented.** Dashboards for Overview, Underemployment, Age & Gender,
-> Industry & Occupation, Education, Workforce, and Forecasting (Holt-Winters + anomaly
-> detection), plus a secure admin area (JWT login, background ETL/forecast triggers, run
-> logs). 18 PSA tables (2005–April 2026) normalized into one long fact table. Optional
-> polish remaining: CSV upload, dark mode, portfolio landing page (see `Phases.md`).
+> **Status: V1–V4 complete.** Portfolio landing page + dashboards for Overview,
+> Underemployment, Age & Gender, Industry & Occupation, Education, Workforce, and
+> Forecasting (Holt-Winters & Random Forest forecasts, z-score & Isolation-Forest
+> anomalies), plus a secure admin area (JWT login, background ETL/forecast triggers,
+> validated CSV upload, run logs). Dark mode and CSV/PNG chart export throughout.
+> 18 PSA tables (2005–April 2026) normalized into one long fact table.
 
 ## Architecture
 
@@ -81,8 +82,10 @@ Public: `GET /api/health` · `/api/kpis` · `/api/labor/rates|levels|age-sex`
 · `/api/occupation/employment` · `/api/pay/industry` · `/api/education/employment|underemployment`
 · `/api/worker-class` · `/api/hours-worked` · `/api/mean-hours` · `/api/forecast` · `/api/anomalies`
 
+`/api/forecast` and `/api/anomalies` accept `?method=` (`ets`|`rf`, `zscore`|`iforest`).
+
 Admin (JWT): `POST /api/admin/login` · `POST /api/admin/etl/run` · `POST /api/admin/forecast/run`
-· `GET /api/admin/logs`
+· `POST /api/admin/upload` (CSV) · `GET /api/admin/logs`
 
 ## Deployment
 
