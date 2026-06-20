@@ -59,8 +59,8 @@ Overview, Underemployment, and Age & Gender.
 
 ## §5 Quality
 
-- Frontend component tests (Vitest + Testing Library) for filters, chart rendering, and
-  the loading/empty/error states.
+- ✅ Frontend component tests (Vitest + Testing Library): KpiCard delta logic, PillGroup
+  interaction, StateWrapper loading/error/empty states. Wired into CI.
 - An accessibility pass (axe) on each page; verify contrast in both themes and keyboard
   operability of the new controls.
 - Lighthouse/perf budget check on the deployed frontend.
