@@ -19,18 +19,24 @@ function Metric({ label, value }: { label: string; value?: number | null }) {
   );
 }
 
+const MODELS = [
+  { id: "ets", label: "Holt-Winters" },
+  { id: "rf", label: "Random Forest" },
+];
+
 export default function Forecasting() {
   const [indicator, setIndicator] = useState(INDICATORS[0]);
+  const [method, setMethod] = useState("ets");
   const { data, error, isLoading } = useApi<ForecastResp>(
-    `/forecast?indicator=${encodeURIComponent(indicator)}`);
+    `/forecast?indicator=${encodeURIComponent(indicator)}&method=${method}`);
 
   return (
     <div>
       <h2 className="mb-1 text-2xl font-bold">Forecasting</h2>
-      <p className="mb-4 text-sm text-slate-500">
-        Holt-Winters, 6-month horizon. Trained on monthly data (2021–present).
+      <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
+        6-month horizon. Trained on monthly data (2021–present).
       </p>
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="mb-3 flex flex-wrap gap-2">
         {INDICATORS.map((ind) => (
           <button key={ind} onClick={() => setIndicator(ind)}
             className={`rounded-full px-3 py-1 text-xs font-medium ${
@@ -38,6 +44,18 @@ export default function Forecasting() {
                 : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
             }`}>
             {ind}
+          </button>
+        ))}
+      </div>
+      <div className="mb-6 flex flex-wrap gap-2">
+        <span className="self-center text-xs text-slate-400">Model:</span>
+        {MODELS.map((m) => (
+          <button key={m.id} onClick={() => setMethod(m.id)}
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              m.id === method ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900"
+                : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+            }`}>
+            {m.label}
           </button>
         ))}
       </div>

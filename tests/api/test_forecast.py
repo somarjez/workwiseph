@@ -26,3 +26,22 @@ def test_anomalies(client):
     pts = r.json()["points"]
     assert len(pts) > 0
     assert all(isinstance(p["is_anomaly"], bool) for p in pts)
+
+
+def test_forecast_rf_method(client):
+    r = client.get("/api/forecast", params={"indicator": "Unemployment Rate", "method": "rf"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["method"] == "rf"
+    assert len(body["forecast"]) == 6
+
+
+def test_forecast_bad_method(client):
+    r = client.get("/api/forecast", params={"method": "magic"})
+    assert r.status_code == 400
+
+
+def test_anomalies_iforest_method(client):
+    r = client.get("/api/anomalies", params={"indicator": "Unemployment Rate", "method": "iforest"})
+    assert r.status_code == 200
+    assert r.json()["method"] == "iforest"
