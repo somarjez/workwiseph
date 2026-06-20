@@ -58,12 +58,47 @@ def _band(point: list[float], sd: float) -> dict:
     }
 
 
-def backtest_metrics(values, horizon: int = 6, season: int = 12) -> dict:
+def _rf_features(series: list[float], i: int, season: int) -> list[float]:
+    return [
+        series[i - 1], series[i - 2], series[i - 3],
+        series[i - season] if i - season >= 0 else series[i - 1],
+        float(np.mean(series[i - 3:i])),
+        float(np.mean(series[max(0, i - season):i])),
+    ]
+
+
+def forecast_series_rf(values, horizon: int = 6, season: int = 12) -> dict:
+    """Random-forest regression on lag features, recursive multi-step forecast."""
+    s = _clean(values)
+    if len(s) < season + 6:
+        return forecast_series(s, horizon, season)  # not enough history -> ETS/flat
+    from sklearn.ensemble import RandomForestRegressor
+    start = max(3, season)
+    X = [_rf_features(s, i, season) for i in range(start, len(s))]
+    y = s[start:]
+    model = RandomForestRegressor(n_estimators=200, random_state=0)
+    model.fit(X, y)
+    sd = float(np.std(np.asarray(y) - model.predict(X)))
+    hist = list(s)
+    point = []
+    for _ in range(horizon):
+        i = len(hist)
+        p = float(model.predict([_rf_features(hist, i, season)])[0])
+        point.append(p)
+        hist.append(p)
+    return _band(point, sd)
+
+
+FORECASTERS = {"ets": forecast_series, "rf": forecast_series_rf}
+
+
+def backtest_metrics(values, horizon: int = 6, season: int = 12, method: str = "ets") -> dict:
     s = _clean(values)
     if len(s) <= horizon + 8:
         return {"mae": None, "rmse": None, "mape": None}
     train, test = s[:-horizon], s[-horizon:]
-    point = np.asarray(forecast_series(train, horizon, season)["point"])
+    forecaster = FORECASTERS.get(method, forecast_series)
+    point = np.asarray(forecaster(train, horizon, season)["point"])
     actual = np.asarray(test)
     err = point - actual
     mae = float(np.mean(np.abs(err)))
@@ -93,3 +128,25 @@ def detect_anomalies(values, window: int = 12, z: float = 3.0) -> list[bool]:
             # perfectly flat baseline: any deviation is anomalous
             flags[i] = True
     return flags
+
+
+def detect_anomalies_iforest(values, contamination: float = 0.05) -> list[bool]:
+    """Isolation-Forest anomaly detection on (value, first-difference) features."""
+    raw = [None if v is None else float(v) for v in values]
+    idx = [i for i, v in enumerate(raw) if v is not None]
+    flags = [False] * len(raw)
+    if len(idx) < 12:
+        return flags
+    from sklearn.ensemble import IsolationForest
+    feats = []
+    for k, i in enumerate(idx):
+        prev = raw[idx[k - 1]] if k > 0 else raw[i]
+        feats.append([raw[i], raw[i] - prev])
+    preds = IsolationForest(contamination=contamination, random_state=0).fit_predict(feats)
+    for i, p in zip(idx, preds):
+        if p == -1:
+            flags[i] = True
+    return flags
+
+
+ANOMALY_DETECTORS = {"zscore": detect_anomalies, "iforest": detect_anomalies_iforest}

@@ -1,6 +1,7 @@
 import math
 from data_pipeline.forecasting import (
-    forecast_series, backtest_metrics, detect_anomalies)
+    forecast_series, forecast_series_rf, backtest_metrics,
+    detect_anomalies, detect_anomalies_iforest)
 
 
 def _seasonal_trend(n=36):
@@ -45,3 +46,23 @@ def test_detect_anomalies_flags_spike():
 def test_backtest_metrics_nonnegative():
     m = backtest_metrics(_seasonal_trend(40), horizon=6, season=12)
     assert m["mae"] >= 0 and m["rmse"] >= 0 and m["mape"] >= 0
+
+
+def test_rf_forecast_shape_and_band():
+    out = forecast_series_rf(_seasonal_trend(48), horizon=6, season=12)
+    assert len(out["point"]) == 6
+    assert all(math.isfinite(p) for p in out["point"])
+    for lo, p, up in zip(out["lower"], out["point"], out["upper"]):
+        assert lo <= p <= up
+
+
+def test_rf_backtest_metrics():
+    m = backtest_metrics(_seasonal_trend(48), horizon=6, season=12, method="rf")
+    assert m["mae"] >= 0 and m["rmse"] >= 0
+
+
+def test_iforest_flags_spike():
+    series = [10.0 + (i % 4) * 0.1 for i in range(40)]
+    series[30] = 80.0  # clear outlier
+    flags = detect_anomalies_iforest(series, contamination=0.05)
+    assert flags[30] is True
