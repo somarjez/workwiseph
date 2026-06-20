@@ -27,7 +27,7 @@ export default function Overview() {
       <StateWrapper isLoading={kpis.isLoading} error={kpis.error} isEmpty={!kpis.data?.length}>
         <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
           {kpis.data?.map((k) => (
-            <KpiCard key={k.indicator_name} label={k.indicator_name} value={k.value} unit={k.unit} />
+            <KpiCard key={k.indicator_name} label={k.indicator_name} value={k.value} unit={k.unit} previous={k.previous} />
           ))}
         </div>
       </StateWrapper>

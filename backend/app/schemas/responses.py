@@ -21,3 +21,4 @@ class Kpi(BaseModel):
     value: float | None
     unit: str
     reference_date: date | None
+    previous: float | None = None  # same month, prior year (for YoY delta)

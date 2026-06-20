@@ -49,7 +49,7 @@ export default function Home() {
           <h2 className="mb-4 text-sm font-semibold text-ink">Latest indicators</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {percents.map((k) => (
-              <KpiCard key={k.indicator_name} label={k.indicator_name} value={k.value} unit={k.unit} />
+              <KpiCard key={k.indicator_name} label={k.indicator_name} value={k.value} unit={k.unit} previous={k.previous} />
             ))}
           </div>
         </section>
