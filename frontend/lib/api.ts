@@ -22,3 +22,8 @@ export interface ForecastResp {
   forecast: ForecastPoint[];
   metrics: ForecastMetrics;
 }
+export interface AnomalyResp {
+  indicator: string;
+  method: string;
+  points: { reference_date: string; value: number | null; is_anomaly: boolean }[];
+}
