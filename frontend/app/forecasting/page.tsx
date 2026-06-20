@@ -12,9 +12,9 @@ const INDICATORS = [
 
 function Metric({ label, value }: { label: string; value?: number | null }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="text-2xl font-bold text-slate-900">{value == null ? "—" : value.toFixed(2)}</div>
-      <div className="mt-1 text-xs font-medium text-slate-500">{label}</div>
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value == null ? "—" : value.toFixed(2)}</div>
+      <div className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{label}</div>
     </div>
   );
 }
@@ -34,7 +34,8 @@ export default function Forecasting() {
         {INDICATORS.map((ind) => (
           <button key={ind} onClick={() => setIndicator(ind)}
             className={`rounded-full px-3 py-1 text-xs font-medium ${
-              ind === indicator ? "bg-blue-600 text-white" : "bg-white text-slate-600 border border-slate-200"
+              ind === indicator ? "bg-blue-600 text-white"
+                : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
             }`}>
             {ind}
           </button>

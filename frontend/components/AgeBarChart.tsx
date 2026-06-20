@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import type { AgeRow } from "@/lib/api";
+import ChartCard from "./ChartCard";
 
 export default function AgeBarChart({ rows, label }: { rows: AgeRow[]; label: string }) {
   // Latest period with data, exclude the Total aggregate.
@@ -11,17 +12,16 @@ export default function AgeBarChart({ rows, label }: { rows: AgeRow[]; label: st
   const latest = withData.filter((r) => r.year === latestYear);
   const data = latest.map((r) => ({ name: r.age_group.replace(" Years Old", ""), value: r.value }));
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h3 className="mb-3 text-sm font-semibold text-slate-700">{label}</h3>
+    <ChartCard title={label} csvData={data}>
       <ResponsiveContainer width="100%" height={260}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
-          <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-          <YAxis tick={{ fontSize: 10 }} width={40} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.4} />
+          <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} />
+          <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} width={40} />
           <Tooltip />
           <Bar dataKey="value" fill="#2563eb" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
-    </div>
+    </ChartCard>
   );
 }
