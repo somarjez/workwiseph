@@ -87,16 +87,16 @@ export default function Admin() {
           className="rounded border border-slate-300 px-4 py-2 text-sm">Refresh logs</button>}
       </div>
       {msg && <p className="mb-4 text-sm text-slate-600">{msg}</p>}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <thead className="bg-slate-50 text-xs uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400">
             <tr><th className="px-4 py-2">#</th><th className="px-4 py-2">Job</th>
               <th className="px-4 py-2">Status</th><th className="px-4 py-2">Started</th>
               <th className="px-4 py-2">Finished</th></tr>
           </thead>
           <tbody>
             {logs.map((l) => (
-              <tr key={l.id} className="border-t border-slate-100">
+              <tr key={l.id} className="border-t border-slate-100 dark:border-slate-800">
                 <td className="px-4 py-2">{l.id}</td>
                 <td className="px-4 py-2">{l.job}</td>
                 <td className="px-4 py-2">
