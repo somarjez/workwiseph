@@ -24,9 +24,11 @@ on Overview, Underemployment, and Age & Gender (re-queries the API); **time-rang
 (All / 10Y / 5Y) on trend lines (client-side). The sex filter surfaces real gaps
 (e.g. labor-force participation ~74% male vs ~51% female).
 
+**Done:** **Compare mode** — a "Compare" option on the sex filter overlays Male vs Female
+on one chart (MultiLineChart for rate trends, GroupedAgeBarChart for age bands) on
+Overview, Underemployment, and Age & Gender.
+
 **Next:**
-- **Compare mode** — overlay Male and Female on one line chart (two series) instead of
-  toggling, for the participation/underemployment gap story.
 - **Year selector** for the age-group snapshot charts (currently fixed to the latest year);
   expose available years from the API.
 - **Age-group filter** on Age & Gender (single-age-band focus).
