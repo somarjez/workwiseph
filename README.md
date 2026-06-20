@@ -89,6 +89,14 @@ Public: `GET /api/health` · `/api/kpis` · `/api/labor/rates|levels|age-sex`
 Admin (JWT): `POST /api/admin/login` · `POST /api/admin/etl/run` · `POST /api/admin/forecast/run`
 · `POST /api/admin/upload` (CSV) · `GET /api/admin/logs`
 
+## Documentation
+
+- [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) — tables, columns, units, coverage
+- [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) — PSA provenance and file mapping
+- [`docs/DATA_CLEANING_RULES.md`](docs/DATA_CLEANING_RULES.md) — the rules the ETL applies
+- [`docs/EDA_FINDINGS.md`](docs/EDA_FINDINGS.md) — key findings (notebook: `data_pipeline/notebooks/EDA_REPORT.ipynb`)
+- [`PHASES_V2.md`](PHASES_V2.md) — improvement roadmap
+
 ## Deployment
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — Neon (database), Render (API), Vercel (frontend).

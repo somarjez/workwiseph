@@ -12,8 +12,8 @@ to the **current** system — the gaps and the next level of polish.
 | Phases 1, 3, 4, 6, 7 (build), 9, 10 (configs), 12 | ✅ Done |
 | Phase 8 — interactive filters (sex / time range) | ✅ Done (Roadmap V2 §1) |
 | Phase 8 — filters (age group, month) | 🔲 Partial — see §1 |
-| Phase 2 — DATA_DICTIONARY / DATA_SOURCES / DATA_CLEANING_RULES | 🔲 Not done — §3 |
-| Phase 5 — EDA notebook + EDA_FINDINGS.md | 🔲 Not done — §4 |
+| Phase 2 — DATA_DICTIONARY / DATA_SOURCES / DATA_CLEANING_RULES | ✅ Done (`docs/`) |
+| Phase 5 — EDA notebook + EDA_FINDINGS.md | ✅ Done (`docs/EDA_FINDINGS.md`, notebook) |
 | Phase 11 — frontend filter/chart tests | 🔲 Not done — §5 |
 | Cloud deployment (Render/Vercel/Neon prod) | 🔲 User action — DEPLOYMENT.md |
 
