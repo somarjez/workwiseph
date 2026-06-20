@@ -1,10 +1,11 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, UploadFile, File
 from pydantic import BaseModel
 
 from backend.app.core.auth_deps import get_current_admin
 from backend.app.core.rate_limit import limiter
 from backend.app.core.security import create_token
 from backend.app.services import admin_service
+from backend.app.services.admin_service import UploadError
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -39,6 +40,17 @@ def run_forecast(background: BackgroundTasks, admin: str = Depends(get_current_a
     log_id = admin_service.start_log("forecast")
     background.add_task(admin_service.run_forecast_job, log_id)
     return {"job": "forecast", "status": "started", "log_id": log_id}
+
+
+@router.post("/upload")
+@limiter.limit("5/minute")
+async def upload(request: Request, file: UploadFile = File(...),
+                 admin: str = Depends(get_current_admin)):
+    content = await file.read()
+    try:
+        return admin_service.ingest_csv(file.filename or "upload.csv", content)
+    except UploadError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=str(exc))
 
 
 @router.get("/logs")
