@@ -3,6 +3,80 @@
 /* Class-based dark mode: `dark:` utilities apply when an ancestor has `.dark`. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --bg: oklch(0.985 0.003 250);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.975 0.004 250);
+  --border: oklch(0.92 0.004 250);
+  --ink: oklch(0.24 0.012 264);
+  --muted: oklch(0.47 0.01 264);
+  --accent: oklch(0.48 0.13 256);
+  --accent-weak: oklch(0.93 0.045 256);
+  --success: oklch(0.55 0.13 150);
+  --warning: oklch(0.6 0.13 60);
+  --danger: oklch(0.55 0.18 25);
+}
+
+.dark {
+  --bg: oklch(0.185 0.012 264);
+  --surface: oklch(0.235 0.012 264);
+  --surface-2: oklch(0.21 0.012 264);
+  --border: oklch(0.32 0.012 264);
+  --ink: oklch(0.96 0 0);
+  --muted: oklch(0.72 0.012 264);
+  --accent: oklch(0.72 0.13 256);
+  --accent-weak: oklch(0.33 0.06 256);
+  --success: oklch(0.72 0.13 150);
+  --warning: oklch(0.8 0.13 70);
+  --danger: oklch(0.7 0.16 25);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-weak: var(--accent-weak);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, "Times New Roman", serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+  }
+}
+
+/* Tabular figures for data/numerals. */
+.nums { font-variant-numeric: tabular-nums; }
+
+/* Subtle mount reveal (enhances already-visible content). */
+@keyframes ww-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-rise { animation: ww-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Loading skeleton shimmer. */
+@keyframes ww-shimmer { 100% { background-position: -200% 0; } }
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 37%, var(--surface-2) 63%);
+  background-size: 200% 100%;
+  animation: ww-shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

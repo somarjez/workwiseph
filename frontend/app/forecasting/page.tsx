@@ -4,25 +4,40 @@ import { useApi } from "@/lib/useApi";
 import type { ForecastResp } from "@/lib/api";
 import ForecastChart from "@/components/ForecastChart";
 import StateWrapper from "@/components/StateWrapper";
+import PageHeader from "@/components/PageHeader";
 
 const INDICATORS = [
   "Unemployment Rate", "Underemployment Rate",
   "Employment Rate", "Labor Force Participation Rate",
 ];
-
-function Metric({ label, value }: { label: string; value?: number | null }) {
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value == null ? "—" : value.toFixed(2)}</div>
-      <div className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{label}</div>
-    </div>
-  );
-}
-
 const MODELS = [
   { id: "ets", label: "Holt-Winters" },
   { id: "rf", label: "Random Forest" },
 ];
+
+function Pill({ active, onClick, children }: {
+  active: boolean; onClick: () => void; children: React.ReactNode;
+}) {
+  return (
+    <button onClick={onClick}
+      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+        active ? "bg-accent text-white" : "border border-border bg-surface text-muted hover:text-ink"
+      }`}>
+      {children}
+    </button>
+  );
+}
+
+function Metric({ label, value }: { label: string; value?: number | null }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="nums text-2xl font-semibold tracking-tight text-ink">
+        {value == null ? "—" : value.toFixed(2)}
+      </div>
+      <div className="mt-1 text-xs font-medium text-muted">{label}</div>
+    </div>
+  );
+}
 
 export default function Forecasting() {
   const [indicator, setIndicator] = useState(INDICATORS[0]);
@@ -32,43 +47,31 @@ export default function Forecasting() {
 
   return (
     <div>
-      <h2 className="mb-1 text-2xl font-bold">Forecasting</h2>
-      <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
-        6-month horizon. Trained on monthly data (2021–present).
-      </p>
+      <PageHeader
+        title="Forecasting"
+        context="Six-month projections with a 95% confidence band, backtested on held-out months. Trained on monthly data from 2021 onward."
+      />
       <div className="mb-3 flex flex-wrap gap-2">
         {INDICATORS.map((ind) => (
-          <button key={ind} onClick={() => setIndicator(ind)}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              ind === indicator ? "bg-blue-600 text-white"
-                : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
-            }`}>
-            {ind}
-          </button>
+          <Pill key={ind} active={ind === indicator} onClick={() => setIndicator(ind)}>{ind}</Pill>
         ))}
       </div>
-      <div className="mb-6 flex flex-wrap gap-2">
-        <span className="self-center text-xs text-slate-400">Model:</span>
+      <div className="mb-8 flex flex-wrap items-center gap-2">
+        <span className="text-xs text-muted">Model</span>
         {MODELS.map((m) => (
-          <button key={m.id} onClick={() => setMethod(m.id)}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              m.id === method ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900"
-                : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
-            }`}>
-            {m.label}
-          </button>
+          <Pill key={m.id} active={m.id === method} onClick={() => setMethod(m.id)}>{m.label}</Pill>
         ))}
       </div>
       <StateWrapper isLoading={isLoading} error={error} isEmpty={!data?.history.length}>
         {data && (
-          <>
-            <div className="mb-6 grid grid-cols-3 gap-4 sm:max-w-md">
+          <div className="space-y-6">
+            <div className="grid grid-cols-3 gap-4 sm:max-w-md">
               <Metric label="MAE" value={data.metrics.mae} />
               <Metric label="RMSE" value={data.metrics.rmse} />
               <Metric label="MAPE %" value={data.metrics.mape} />
             </div>
             <ForecastChart data={data} label={`${indicator}: actual vs forecast`} />
-          </>
+          </div>
         )}
       </StateWrapper>
     </div>

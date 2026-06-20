@@ -18,20 +18,29 @@ const NAV = [
 export default function Sidebar() {
   const path = usePathname();
   return (
-    <aside className="flex w-60 shrink-0 flex-col bg-slate-900 text-slate-100 min-h-screen p-5">
-      <h1 className="text-xl font-bold mb-1">WorkWise PH</h1>
-      <p className="text-xs text-slate-400 mb-6">Labor Market Analytics</p>
-      <nav className="flex flex-col gap-1">
-        {NAV.map((n) => (
-          <Link key={n.href} href={n.href}
-            className={`rounded px-3 py-2 text-sm ${
-              path === n.href ? "bg-slate-700 font-semibold" : "hover:bg-slate-800"
-            }`}>
-            {n.label}
-          </Link>
-        ))}
+    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border bg-surface-2 px-4 py-6">
+      <Link href="/" className="block px-2 focus-visible:outline-none">
+        <span className="font-display text-xl font-semibold tracking-tight text-ink">WorkWise PH</span>
+        <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-muted">Labor Analytics</p>
+      </Link>
+      <nav className="mt-8 flex flex-1 flex-col gap-0.5">
+        {NAV.map((n) => {
+          const active = path === n.href;
+          return (
+            <Link key={n.href} href={n.href} aria-current={active ? "page" : undefined}
+              className={`rounded-md px-3 py-2 text-sm transition-colors ${
+                active
+                  ? "bg-accent-weak font-medium text-accent"
+                  : "text-muted hover:bg-surface hover:text-ink"
+              }`}>
+              {n.label}
+            </Link>
+          );
+        })}
       </nav>
-      <div className="mt-auto"><ThemeToggle /></div>
+      <div className="border-t border-border pt-2">
+        <ThemeToggle />
+      </div>
     </aside>
   );
 }
