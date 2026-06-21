@@ -27,3 +27,13 @@ export interface AnomalyResp {
   method: string;
   points: { reference_date: string; value: number | null; is_anomaly: boolean }[];
 }
+export interface ExploreDataset {
+  source: string; label: string; unit: string;
+  indicators: string[]; has_sex: boolean; has_age: boolean; categories: string[];
+}
+export interface ExploreOptions { datasets: ExploreDataset[]; }
+export interface ExploreRow {
+  reference_date: string | null; year: number; month: string | null;
+  sex: string; age_group: string; category: string | null; value: number | null; unit: string;
+}
+export interface ExploreSeries { source: string; rows: ExploreRow[]; }
