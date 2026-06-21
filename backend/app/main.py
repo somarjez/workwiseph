@@ -5,7 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from backend.app.core.config import settings
 from backend.app.core.rate_limit import limiter
 from backend.app.routers import (
-    health, kpis, labor, underemployment, sectors, education, workforce, forecast, admin)
+    health, kpis, labor, underemployment, sectors, education, workforce, forecast, admin, explore)
 from backend.app.services import admin_service
 
 
@@ -44,6 +44,7 @@ def create_app() -> FastAPI:
     app.include_router(workforce.router, prefix="/api")
     app.include_router(forecast.router, prefix="/api")
     app.include_router(admin.router, prefix="/api")
+    app.include_router(explore.router, prefix="/api")
 
     # Seed the admin user. Guarded so the app still boots if the DB is unreachable.
     try:
