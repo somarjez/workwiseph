@@ -1,17 +1,19 @@
 "use client";
-import { useState } from "react";
+import { Suspense } from "react";
 import { useApi } from "@/lib/useApi";
 import type { Kpi } from "@/lib/api";
 import { SEX_FILTER_OPTIONS, RANGE_OPTIONS, rangeYears, type SexFilter, type Range } from "@/lib/filters";
+import { useQueryState } from "@/lib/useQueryState";
 import KpiCard from "@/components/KpiCard";
 import StateWrapper from "@/components/StateWrapper";
 import PageHeader from "@/components/PageHeader";
 import PillGroup from "@/components/PillGroup";
+import CopyLinkButton from "@/components/CopyLinkButton";
 import SexComparableLine from "@/components/SexComparableLine";
 
-export default function Overview() {
-  const [sex, setSex] = useState<SexFilter>("Both Sexes");
-  const [range, setRange] = useState<Range>("all");
+function OverviewInner() {
+  const [sex, setSex] = useQueryState<SexFilter>("sex", "Both Sexes");
+  const [range, setRange] = useQueryState<Range>("range", "all");
   const kpis = useApi<Kpi[]>("/kpis");
   const years = rangeYears(range);
 
@@ -22,6 +24,7 @@ export default function Overview() {
         context="The headline indicators from the Philippine Labor Force Survey — the rates and counts that frame everything else in this report.">
         <PillGroup label="Sex" options={SEX_FILTER_OPTIONS} value={sex} onChange={setSex} />
         <PillGroup label="Range" options={RANGE_OPTIONS} value={range} onChange={setRange} />
+        <CopyLinkButton />
       </PageHeader>
 
       <StateWrapper isLoading={kpis.isLoading} error={kpis.error} isEmpty={!kpis.data?.length}>
@@ -38,4 +41,8 @@ export default function Overview() {
       </div>
     </div>
   );
+}
+
+export default function Overview() {
+  return <Suspense><OverviewInner /></Suspense>;
 }

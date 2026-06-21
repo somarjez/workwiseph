@@ -1,11 +1,13 @@
 "use client";
-import { useState } from "react";
+import { Suspense } from "react";
 import { useApi } from "@/lib/useApi";
 import type { ForecastResp, AnomalyResp } from "@/lib/api";
+import { useQueryState } from "@/lib/useQueryState";
 import ForecastChart from "@/components/ForecastChart";
 import StateWrapper from "@/components/StateWrapper";
 import PageHeader from "@/components/PageHeader";
 import PillGroup from "@/components/PillGroup";
+import CopyLinkButton from "@/components/CopyLinkButton";
 import type { Option } from "@/components/PillGroup";
 
 const INDICATORS = [
@@ -33,10 +35,10 @@ function Metric({ label, value }: { label: string; value?: number | null }) {
   );
 }
 
-export default function Forecasting() {
-  const [indicator, setIndicator] = useState(INDICATORS[0]);
-  const [method, setMethod] = useState("ets");
-  const [anom, setAnom] = useState("zscore");
+function ForecastingInner() {
+  const [indicator, setIndicator] = useQueryState<string>("indicator", INDICATORS[0]);
+  const [method, setMethod] = useQueryState<string>("model", "ets");
+  const [anom, setAnom] = useQueryState<string>("anomalies", "zscore");
   const enc = encodeURIComponent(indicator);
 
   const { data, error, isLoading } = useApi<ForecastResp>(`/forecast?indicator=${enc}&method=${method}`);
@@ -49,8 +51,9 @@ export default function Forecasting() {
     <div>
       <PageHeader
         title="Forecasting"
-        context="Six-month projections with a 95% confidence band, backtested on held-out months. Trained on monthly data from 2021 onward."
-      />
+        context="Six-month projections with a 95% confidence band, backtested on held-out months. Trained on monthly data from 2021 onward.">
+        <CopyLinkButton />
+      </PageHeader>
 
       <div className="mb-3 flex flex-wrap gap-2">
         {INDICATORS.map((ind) => (
@@ -82,4 +85,8 @@ export default function Forecasting() {
       </StateWrapper>
     </div>
   );
+}
+
+export default function Forecasting() {
+  return <Suspense><ForecastingInner /></Suspense>;
 }
