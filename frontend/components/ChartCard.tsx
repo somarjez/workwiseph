@@ -23,7 +23,7 @@ export default function ChartCard({
     <figure ref={ref} className="rounded-xl border border-border bg-surface p-5">
       <figcaption className="mb-4 flex items-start justify-between gap-3">
         <h3 className="text-sm font-semibold leading-snug text-ink">{title}</h3>
-        <div className="flex shrink-0 gap-1 text-[11px] font-medium text-muted">
+        <div className="flex shrink-0 gap-1 text-[11px] font-medium text-muted print:hidden">
           {csvData && csvData.length > 0 && (
             <button onClick={() => downloadCSV(csvData, `${base}.csv`)} className={btn}
               title="Download data as CSV">CSV</button>
