@@ -2,6 +2,11 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
+import CommandPalette from "./CommandPalette";
+
+function openCommand() {
+  window.dispatchEvent(new Event("ww:command"));
+}
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -49,12 +54,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
           <span className="font-display text-lg font-semibold tracking-tight">WorkWise PH</span>
+          <button onClick={openCommand} aria-label="Search"
+            className="ml-auto rounded-md p-1.5 text-muted transition-colors hover:bg-surface-2 hover:text-ink">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
         </header>
 
         <main className="flex-1 px-5 py-7 sm:px-6 sm:py-8 md:px-10 md:py-10">
           <div className="mx-auto max-w-6xl">{children}</div>
         </main>
       </div>
+
+      <CommandPalette />
     </div>
   );
 }
