@@ -10,6 +10,7 @@ export const COMMANDS: Cmd[] = [
   { label: "Workforce", href: "/workforce", group: "Pages" },
   { label: "Forecasting", href: "/forecasting", group: "Pages" },
   { label: "Data Explorer", href: "/explore", group: "Pages" },
+  { label: "Report (printable)", href: "/report", group: "Pages" },
   { label: "Admin", href: "/admin", group: "Pages" },
   // Indicator deep-links into the forecasting view
   { label: "Forecast: Unemployment Rate", href: "/forecasting?indicator=Unemployment%20Rate", group: "Forecasts" },
