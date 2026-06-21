@@ -23,7 +23,12 @@ export default function Sidebar() {
         <span className="font-display text-xl font-semibold tracking-tight text-ink">WorkWise PH</span>
         <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-muted">Labor Analytics</p>
       </Link>
-      <nav className="mt-8 flex flex-1 flex-col gap-0.5">
+      <button onClick={() => window.dispatchEvent(new Event("ww:command"))}
+        className="mt-6 flex items-center justify-between rounded-md border border-border bg-surface px-3 py-2 text-xs text-muted transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+        <span>Search…</span>
+        <kbd className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium">⌘K</kbd>
+      </button>
+      <nav className="mt-4 flex flex-1 flex-col gap-0.5">
         {NAV.map((n) => {
           const active = path === n.href;
           return (

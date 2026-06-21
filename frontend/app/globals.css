@@ -72,6 +72,8 @@
   animation: ww-shimmer 1.4s ease-in-out infinite;
 }
 
+dialog::backdrop { background-color: rgb(2 6 23 / 0.5); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
