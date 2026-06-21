@@ -18,7 +18,7 @@ const NAV = [
 export default function Sidebar() {
   const path = usePathname();
   return (
-    <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border bg-surface-2 px-4 py-6">
+    <aside className="flex h-full min-h-screen w-60 shrink-0 flex-col border-r border-border bg-surface-2 px-4 py-6 md:min-h-0">
       <Link href="/" className="block px-2 focus-visible:outline-none">
         <span className="font-display text-xl font-semibold tracking-tight text-ink">WorkWise PH</span>
         <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-muted">Labor Analytics</p>

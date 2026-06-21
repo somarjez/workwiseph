@@ -1,3 +1,6 @@
+"use client";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
+
 export default function PageHeader({
   title, context, children,
 }: {
@@ -5,6 +8,7 @@ export default function PageHeader({
   context?: string;
   children?: React.ReactNode;
 }) {
+  useDocumentTitle(title);
   return (
     <header className="mb-8 animate-rise">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">

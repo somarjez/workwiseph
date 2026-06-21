@@ -9,15 +9,30 @@ from backend.app.routers import (
 from backend.app.services import admin_service
 
 
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+}
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="WorkWise PH API", version="0.1.0")
     if settings.rate_limit_enabled:
         app.state.limiter = limiter
         app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+    @app.middleware("http")
+    async def security_headers(request, call_next):
+        response = await call_next(request)
+        for k, v in SECURITY_HEADERS.items():
+            response.headers.setdefault(k, v)
+        return response
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
-        allow_methods=["GET"],
+        allow_methods=["GET", "POST", "OPTIONS"],  # admin uses POST (login/upload/run)
         allow_headers=["*"],
     )
     app.include_router(health.router, prefix="/api")

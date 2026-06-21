@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import AppShell from "@/components/AppShell";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const newsreader = Newsreader({
@@ -9,9 +9,32 @@ const newsreader = Newsreader({
   weight: ["400", "500", "600"], style: ["normal", "italic"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "WorkWise PH — Labor Market Analytics",
-  description: "Philippine labor-market & underemployment analytics, 2005–2026.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "WorkWise PH — Labor Market Analytics",
+    template: "%s · WorkWise PH",
+  },
+  description:
+    "Interactive analytics on Philippine labor: employment, underemployment, industry, education, pay, working hours, and forecasts, from PSA Labor Force Survey data (2005–2026).",
+  applicationName: "WorkWise PH",
+  keywords: ["Philippines", "labor", "employment", "underemployment", "PSA", "analytics", "dashboard"],
+  openGraph: {
+    title: "WorkWise PH — Labor Market Analytics",
+    description: "Two decades of Philippine labor data, read closely.",
+    type: "website",
+    siteName: "WorkWise PH",
+  },
+  twitter: { card: "summary_large_image", title: "WorkWise PH", description: "Philippine labor market analytics" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#101418" },
+  ],
 };
 
 // Applied before paint to avoid a light→dark flash on load.
@@ -24,12 +47,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${newsreader.variable}`}>
       <head><script dangerouslySetInnerHTML={{ __html: NO_FLASH }} /></head>
       <body suppressHydrationWarning className="font-sans antialiased">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 px-6 py-8 md:px-10 md:py-10">
-            <div className="mx-auto max-w-6xl">{children}</div>
-          </main>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
