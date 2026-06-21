@@ -37,11 +37,14 @@ Build: `pip install -e backend` · Start: `uvicorn backend.app.main:app --host 0
 
 1. 👤 Vercel → **Add New → Project**, import this repo.
 2. 👤 Set **Root Directory** to `frontend` (Vercel auto-detects Next.js there).
-3. 👤 Add env var `NEXT_PUBLIC_API_URL` = your Render API base URL
-   (e.g. `https://workwise-api.onrender.com`).
+3. 👤 Add env vars:
+   - `NEXT_PUBLIC_API_URL` = your Render API base URL (e.g. `https://workwise-api.onrender.com`).
+   - `NEXT_PUBLIC_SITE_URL` = your Vercel URL (e.g. `https://workwiseph.vercel.app`) — used
+     for SEO metadata, the OpenGraph image, `robots.txt`, and `sitemap.xml`.
 4. Deploy. Open the site; the dashboard fetches from the Render API in the browser.
 5. 👤 Back in Render, set `CORS_ORIGINS` to the Vercel domain and redeploy so the
-   browser is allowed to call the API.
+   browser is allowed to call the API. (The backend allows GET + POST/OPTIONS, so the
+   admin login/upload/run endpoints work cross-origin.)
 
 ## Checklist
 

@@ -28,16 +28,21 @@ on Overview, Underemployment, and Age & Gender (re-queries the API); **time-rang
 on one chart (MultiLineChart for rate trends, GroupedAgeBarChart for age bands) on
 Overview, Underemployment, and Age & Gender.
 
+**Done:** **URL-synced shareable filters** (`useQueryState` + Copy-link), **Command palette**
+(⌘K), **Custom Data Explorer** (`/explore` + `/api/explore/*`), **Printable Report / PDF**
+(`/report`). Plus a **production website pass**: responsive mobile drawer nav, SEO/OpenGraph/
+manifest/icons, 404 + error boundaries, security headers (FE + BE), robots/sitemap, and the
+backend CORS fix for cross-origin admin POSTs.
+
 **Next:**
-- **Year selector** for the age-group snapshot charts (currently fixed to the latest year);
-  expose available years from the API.
+- **Year selector** for the age-group snapshot charts (currently fixed to the latest year).
 - **Age-group filter** on Age & Gender (single-age-band focus).
-- **URL-synced filters** (querystring) so a filtered view is shareable/bookmarkable.
 - Industry/Occupation: **drill-down** from a sector bar into its sub-categories.
 
 ## §2 Data presentation
 
-- Latest-value **delta badges** on KPI cards (▲/▼ vs previous period / prior year).
+- ✅ Latest-value **delta badges** on KPI cards (▲/▼ vs prior year).
+- A small **"as of <month year>"** dateline on each chart sourced from the data.
 - A small **"as of <month year>"** dateline on each chart sourced from the data.
 - Number formatting helpers (thousands → M, locale grouping) centralized.
 
