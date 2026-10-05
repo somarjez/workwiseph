@@ -6,18 +6,23 @@ product
 
 ## Users
 
-Primarily people evaluating the work — recruiters, hiring managers, and clients reviewing
-this as a portfolio piece — who should immediately read it as a credible, real analytics
-product. Secondarily, anyone interested in Philippine labor trends (students, analysts)
-who wants to read the data. Context: desktop browser, scanning quickly, forming a judgment
-about quality and rigor within seconds, then drilling into specific indicators.
+Primarily analysts and students who need a clear, evidence-backed short-term view of
+Philippine labor indicators. Secondarily, recruiters, hiring managers, and clients evaluating
+the work as a portfolio piece. Visitors should understand the forecast direction and its
+uncertainty within a minute, then be able to trace the finding into the historical data.
 
 ## Product Purpose
 
-Turn 20+ years of PSA Labor Force Survey tables into an interactive, trustworthy analytics
-dashboard covering employment, underemployment, industry, education, pay, working hours,
-and short-term forecasts. Success = a visitor trusts the numbers, finds an insight in under
-a minute, and comes away believing the maker can ship a polished, end-to-end data product.
+Turn 20+ years of PSA Labor Force Survey tables into an interactive, trustworthy labor-market
+outlook covering employment, underemployment, industry, education, pay, working hours, and
+short-term forecasts. Success = a visitor can answer where a headline rate is heading, whether
+a threshold is credibly in range, and how uncertain that finding is in under a minute.
+
+## Creator
+
+WorkWise PH was created by Jezreel Ramos, a fourth-year BS Computer Science student majoring
+in Intelligent Systems in the Philippines. His work focuses on data analysis, web development,
+project management, and AI/machine learning.
 
 ## Brand Personality
 

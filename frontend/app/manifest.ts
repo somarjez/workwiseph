@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "WorkWise PH — Labor Market Analytics",
+    name: "WorkWise PH — Philippine Labor Market Outlook",
     short_name: "WorkWise PH",
-    description: "Philippine labor market & underemployment analytics.",
+    description: "Short-term Philippine labor forecasts with uncertainty and supporting PSA analysis.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

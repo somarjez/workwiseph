@@ -23,4 +23,3 @@ The admin feature is removed end-to-end: frontend route and navigation, API endp
 ## Quality Requirements
 
 The landing page and Outlook Builder must be responsive, keyboard accessible, compatible with both themes, and honest in loading, empty, and error states. New derivation behavior is developed test-first. Final verification includes frontend tests, lint, production build, Python tests with a workspace-local temp directory, and diff checks.
-

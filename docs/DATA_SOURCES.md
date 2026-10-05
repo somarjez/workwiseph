@@ -46,5 +46,5 @@ occupation (2005–2016). V1+ uses 2009 PSIC and 2012 PSOC only.
 ## Refresh
 
 PSA publishes new LFS rounds monthly. Re-running the ETL (`python -m
-data_pipeline.scripts.run_etl`, or the admin "Run ETL" trigger, or the monthly Render cron)
-re-reads `datasets/` and reloads the database.
+data_pipeline.scripts.run_etl`) or letting the monthly Render cron run re-reads `datasets/`
+and reloads the database.

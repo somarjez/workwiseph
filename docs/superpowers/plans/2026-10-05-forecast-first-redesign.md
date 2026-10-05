@@ -89,4 +89,3 @@
 - [ ] Remove admin credentials/endpoints/instructions and update the product summary, landing metadata, sitemap, robots rules, and data-refresh guidance.
 - [ ] Verify scheduled refresh configuration remains unchanged except for removed admin secrets.
 - [ ] Run the complete frontend and Python verification commands, `git diff --check`, and inspect the final diff against the spec.
-
