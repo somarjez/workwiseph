@@ -25,4 +25,8 @@ describe("filterCommands", () => {
   it("every command points at a route path", () => {
     expect(COMMANDS.every((c) => c.href.startsWith("/"))).toBe(true);
   });
+
+  it("does not expose the removed admin surface", () => {
+    expect(COMMANDS.some((c) => c.href.startsWith("/admin") || /admin/i.test(c.label))).toBe(false);
+  });
 });

@@ -39,6 +39,7 @@ models/artifacts/*.joblib
 models/metrics/*.json
 
 # ---- OS / editor ----
+.worktrees/
 .DS_Store
 Thumbs.db
 .vscode/

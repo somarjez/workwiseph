@@ -9,11 +9,15 @@ function openCommand() {
 }
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
   const path = usePathname();
 
-  // Close the mobile drawer on navigation.
-  useEffect(() => { setOpen(false); }, [path]);
+  if (path === "/") return <>{children}</>;
+
+  return <DashboardShell key={path}>{children}</DashboardShell>;
+}
+
+function DashboardShell({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
 
   // Close on Escape.
   useEffect(() => {

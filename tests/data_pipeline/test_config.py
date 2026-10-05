@@ -1,9 +1,26 @@
 from pathlib import Path
-from data_pipeline.config import settings, TABLE_REGISTRY
+from data_pipeline.config import normalize_database_url, settings, TABLE_REGISTRY
+
+
+def test_generic_postgres_urls_select_installed_psycopg2_driver():
+    assert (
+        normalize_database_url("postgresql://user:pass@host/db")
+        == "postgresql+psycopg2://user:pass@host/db"
+    )
+    assert (
+        normalize_database_url("postgres://user:pass@host/db")
+        == "postgresql+psycopg2://user:pass@host/db"
+    )
+
+
+def test_explicit_database_driver_is_preserved():
+    url = "postgresql+psycopg2://user:pass@host/db"
+
+    assert normalize_database_url(url) == url
 
 
 def test_database_url_loaded():
-    assert settings.database_url.startswith("postgresql")
+    assert settings.database_url.startswith("postgresql+psycopg2://")
 
 
 def test_datasets_dir_exists():

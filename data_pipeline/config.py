@@ -8,6 +8,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(REPO_ROOT / "backend" / ".env")
 
 
+def normalize_database_url(url: str) -> str:
+    """Select the installed psycopg2 driver for generic PostgreSQL URLs."""
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg2://" + url.removeprefix("postgresql://")
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg2://" + url.removeprefix("postgres://")
+    return url
+
+
 @dataclass(frozen=True)
 class Settings:
     database_url: str
@@ -15,7 +24,7 @@ class Settings:
 
 
 settings = Settings(
-    database_url=os.environ.get("DATABASE_URL", ""),
+    database_url=normalize_database_url(os.environ.get("DATABASE_URL", "")),
     datasets_dir=REPO_ROOT / "datasets",
 )
 

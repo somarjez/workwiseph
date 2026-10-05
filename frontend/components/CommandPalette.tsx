@@ -10,6 +10,8 @@ export default function CommandPalette() {
   const [active, setActive] = useState(0);
 
   const results = useMemo(() => filterCommands(query, COMMANDS), [query]);
+  // Query changes intentionally reset keyboard selection to the first result.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setActive(0); }, [query]);
 
   function open() { setQuery(""); setActive(0); ref.current?.showModal(); }

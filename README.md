@@ -1,21 +1,25 @@
-# WorkWise PH — Labor Market & Underemployment Analytics
+# WorkWise PH — Philippine Labor Market Outlook
 
 [![CI](https://github.com/somarjez/workwiseph/actions/workflows/ci.yml/badge.svg)](https://github.com/somarjez/workwiseph/actions/workflows/ci.yml)
 
 WorkWise PH transforms Philippine Statistics Authority (PSA) Labor Force Survey
-tables into an interactive analytics dashboard covering employment, unemployment,
-underemployment, labor-force participation, and age/sex breakdowns. It pairs a
-PostgreSQL-backed ETL pipeline with a FastAPI service and a Next.js dashboard.
+tables into an interactive short-term outlook for employment, unemployment,
+underemployment, and labor-force participation. It pairs a PostgreSQL-backed ETL
+pipeline with a FastAPI service, a guided forecast brief, and supporting Next.js analysis views.
 
-> **Status: V1–V4 complete + a production website pass.** Portfolio landing page and
-> dashboards for Overview, Underemployment, Age & Gender, Industry & Occupation, Education,
+> **Status: Forecast-first production website.** Editorial landing page and guided
+> Outlook Builder with threshold findings, uncertainty, anomalies, and backtest metrics;
+> supporting dashboards for Overview, Underemployment, Age & Gender, Industry & Occupation, Education,
 > Workforce, and Forecasting (Holt-Winters & Random Forest forecasts, z-score &
 > Isolation-Forest anomalies, with anomaly markers), plus a **custom Data Explorer**, a
 > **printable Report (PDF)**, a **⌘K command palette**, **shareable URL-synced filters**,
-> compare mode, YoY KPI deltas, and a secure admin area (JWT, background ETL/forecast
-> triggers, validated CSV upload, run logs). Responsive (mobile drawer nav), dark mode,
+> compare mode, and YoY KPI deltas. Responsive (mobile drawer nav), dark mode,
 > SEO/OpenGraph, security headers, and CSV/PNG export throughout. 18 PSA tables
 > (2005–April 2026) normalized into one long fact table.
+
+Created by **Jezreel Ramos**, a fourth-year BS Computer Science student majoring in
+Intelligent Systems, working across data analysis, web development, project management,
+and AI/machine learning.
 
 ## Architecture
 
@@ -89,9 +93,6 @@ Public: `GET /api/health` · `/api/kpis` · `/api/labor/rates|levels|age-sex`
 
 `/api/forecast` and `/api/anomalies` accept `?method=` (`ets`|`rf`, `zscore`|`iforest`).
 Data explorer: `GET /api/explore/options` · `GET /api/explore/series`.
-
-Admin (JWT): `POST /api/admin/login` · `POST /api/admin/etl/run` · `POST /api/admin/forecast/run`
-· `POST /api/admin/upload` (CSV) · `GET /api/admin/logs`
 
 ## Documentation
 

@@ -5,9 +5,6 @@ class Settings(BaseSettings):
     app_env: str = "development"
     cors_origins: str = "http://localhost:3000"
     rate_limit_enabled: bool = True
-    secret_key: str = "dev-secret"
-    admin_username: str = "admin"
-    admin_password: str = "admin"
 
     model_config = SettingsConfigDict(
         env_file="backend/.env", extra="ignore", case_sensitive=False)

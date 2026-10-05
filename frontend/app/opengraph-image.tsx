@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "WorkWise PH — Philippine Labor Market Analytics";
+export const alt = "WorkWise PH — Philippine Labor Market Outlook";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -18,7 +18,7 @@ export default function OpengraphImage() {
           Philippine Labor Force Survey · 2005–2026
         </div>
         <div style={{ fontSize: 76, lineHeight: 1.05, maxWidth: 980 }}>
-          Two decades of Philippine labor data, read closely.
+          Read the labor market forward, not just backward.
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 30 }}>
           <div style={{ width: 44, height: 44, borderRadius: 10, background: "#3457d5", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700 }}>W</div>

@@ -14,20 +14,22 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "WorkWise PH — Labor Market Analytics",
+    default: "WorkWise PH — Philippine Labor Market Outlook",
     template: "%s · WorkWise PH",
   },
   description:
-    "Interactive analytics on Philippine labor: employment, underemployment, industry, education, pay, working hours, and forecasts, from PSA Labor Force Survey data (2005–2026).",
+    "Build a short-term Philippine labor market outlook with forecast direction, uncertainty, anomalies, and supporting PSA analysis.",
   applicationName: "WorkWise PH",
-  keywords: ["Philippines", "labor", "employment", "underemployment", "PSA", "analytics", "dashboard"],
+  authors: [{ name: "Jezreel Ramos", url: "https://github.com/somarjez" }],
+  creator: "Jezreel Ramos",
+  keywords: ["Philippines", "labor", "employment", "underemployment", "PSA", "forecasting", "analytics"],
   openGraph: {
-    title: "WorkWise PH — Labor Market Analytics",
-    description: "Two decades of Philippine labor data, read closely.",
+    title: "WorkWise PH — Philippine Labor Market Outlook",
+    description: "Read the Philippine labor market forward, with uncertainty kept visible.",
     type: "website",
     siteName: "WorkWise PH",
   },
-  twitter: { card: "summary_large_image", title: "WorkWise PH", description: "Philippine labor market analytics" },
+  twitter: { card: "summary_large_image", title: "WorkWise PH", description: "Philippine labor market outlook" },
 };
 
 export const viewport: Viewport = {

@@ -43,8 +43,7 @@ Build: `pip install -e backend` · Start: `uvicorn backend.app.main:app --host 0
      for SEO metadata, the OpenGraph image, `robots.txt`, and `sitemap.xml`.
 4. Deploy. Open the site; the dashboard fetches from the Render API in the browser.
 5. 👤 Back in Render, set `CORS_ORIGINS` to the Vercel domain and redeploy so the
-   browser is allowed to call the API. (The backend allows GET + POST/OPTIONS, so the
-   admin login/upload/run endpoints work cross-origin.)
+   browser is allowed to call the public read-only API.
 
 ## Checklist
 
