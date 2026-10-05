@@ -19,10 +19,10 @@ if config.config_file_name:
 target_metadata = Base.metadata
 
 
-# Schemas whose tables are defined by ORM models (Alembic manages these).
+# Schemas whose current tables are defined by ORM models (Alembic manages these).
 # Pipeline-built schemas (raw/analytics/ml) are created via to_sql/CREATE TABLE AS
 # and must be excluded, or autogenerate would try to drop them.
-ORM_SCHEMAS = {"clean", "auth", "logs"}
+ORM_SCHEMAS = {"clean"}
 
 
 def _include_object(obj, name, type_, reflected, compare_to):

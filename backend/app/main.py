@@ -5,8 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from backend.app.core.config import settings
 from backend.app.core.rate_limit import limiter
 from backend.app.routers import (
-    health, kpis, labor, underemployment, sectors, education, workforce, forecast, admin, explore)
-from backend.app.services import admin_service
+    health, kpis, labor, underemployment, sectors, education, workforce, forecast, explore)
 
 
 SECURITY_HEADERS = {
@@ -32,7 +31,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
-        allow_methods=["GET", "POST", "OPTIONS"],  # admin uses POST (login/upload/run)
+        allow_methods=["GET", "OPTIONS"],
         allow_headers=["*"],
     )
     app.include_router(health.router, prefix="/api")
@@ -43,14 +42,7 @@ def create_app() -> FastAPI:
     app.include_router(education.router, prefix="/api")
     app.include_router(workforce.router, prefix="/api")
     app.include_router(forecast.router, prefix="/api")
-    app.include_router(admin.router, prefix="/api")
     app.include_router(explore.router, prefix="/api")
-
-    # Seed the admin user. Guarded so the app still boots if the DB is unreachable.
-    try:
-        admin_service.seed_admin()
-    except Exception:  # noqa: BLE001
-        pass
 
     return app
 
